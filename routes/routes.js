@@ -4,15 +4,19 @@ const router = express.Router();
 const Producto = require('../models/models.js')
 
 
-router.get('/inicio', async(req,res) => {
-    res.render('index');
+router.get('/registrar', async(req,res) => {
+    res.render('registro');
 });
+router.get('/home', async(req,res) => {
+    res.render('home');
+});
+
 router.post('/register', (req,res) => {
     const nuevoProducto = new Producto({
             "Referencia": req.body.Referencia,
             "Nombre": req.body.Nombre,
             "Descripcion": req.body.Descripcion,
-            "Precio": req.body.Precio,
+            "Precio": req.body.Precio, 
             "Stock": req.body.Stock,
             "Imagen": req.body.imagen,
             "Habilitado": true
@@ -20,7 +24,7 @@ router.post('/register', (req,res) => {
     )
     nuevoProducto.save()
     console.log("Se guardó el producto")
-    res.redirect("/index")
+    res.redirect("/inicio")
 })
 
 module.exports = router;
