@@ -15,7 +15,6 @@ router.post('/register', (req,res) => {
     const nuevoProducto = new Producto({
             "Referencia": req.body.Referencia,
             "Nombre": req.body.Nombre,
-            "Descripcion": req.body.Descripcion,
             "Precio": req.body.Precio,
             "Stock": req.body.Stock,
             "Imagen": req.body.imagen,
