@@ -1,7 +1,11 @@
 const conexion = require("../database/connectionmongoose");
 const express = require('express');
 const router = express.Router();
-const Producto = require('../models/models.js')
+const Producto = require('../models/modelProducto.js');
+const Cliente = require('../models/modelCliente.js');
+const Vendedor = require('../models/modelVendedor.js');
+const Venta = require('../models/modelVenta.js');
+
 
 
 router.get('/inicio', async(req,res) => {
@@ -20,7 +24,7 @@ router.post('/register', (req,res) => {
     )
     nuevoProducto.save()
     console.log("Se guardó el producto")
-    res.redirect("/index")
+    res.redirect("/inicio")
 })
 
 module.exports = router;

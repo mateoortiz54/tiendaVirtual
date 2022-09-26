@@ -12,9 +12,6 @@ const SchemaProducto = new mongoose.Schema({
         type: String,
         required: true,
     },
-    Descripcion:{
-        type: String
-    },
     Precio: {
         type: parseFloat(Number),
         default: 0,
@@ -35,7 +32,8 @@ const SchemaProducto = new mongoose.Schema({
         default: true,
     },
 
-})
+});
+
 const Productos = mongoose.model("Productos", SchemaProducto);
 
 module.exports = Productos;
