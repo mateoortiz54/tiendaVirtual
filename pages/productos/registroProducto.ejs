@@ -1,4 +1,8 @@
-<%- include('../partials/headers'); %>
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
     
     <div style="margin-top: 8em; margin-left:2em ;  margin-right: 2em; background-color: rgb(72, 77, 81) ; margin-bottom: 2em;">
         
