@@ -51,7 +51,11 @@ router.get('/eliminarProducto/:id', async (req, res) => {
 });
 
 router.get('/registrarProducto', async (req, res) => {
-    res.render('productos/registroProducto');
+    if (req.cookies.usuario) {
+        res.render('productos/registroProducto', { usuario: req.cookies.usuario });
+    } else {
+        res.render('productos/registroProducto', { usuario: false });
+    }
 });
 
 
@@ -67,6 +71,7 @@ router.post('/registerProducto', (req, res) => {
     )
     nuevoProducto.save()
     console.log("Se guardó el producto")
+
     res.redirect("/listarProductos")
 })
 
@@ -79,7 +84,11 @@ router.get('/editarProducto/:id', (req, res) => {
             res.redirect('/listarProductos')
             
         }else{
-            res.render("productos/formActualizarProducto", { datos: data })
+            if (req.cookies.usuario) {
+                res.render("productos/formActualizarProducto", { datos: data, usuario: req.cookies.usuario });
+            } else {
+                res.render("productos/formActualizarProducto", { datos: data, usuario: false });
+            }
         }
     })
 })
@@ -132,7 +141,6 @@ router.post('/registerCliente', (req, res) => {
     )
     nuevoCliente.save();
     console.log("Se guardó el Cliente");
-    res.cookie("usuario", req.body.usuario);
     res.redirect("home");
 });
 
@@ -163,8 +171,15 @@ router.get('/editarCliente/:id', (req, res) => {
     Cliente.findOne({ _id: req.params.id }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
-        } else {
-            res.render("clientes/formActualizarCliente", { datos: data })
+        } else if(data == null){
+            console.log("No encontró el cliente")
+            res.redirect('listarClientes')
+        }else{
+            if (req.cookies.usuario) {
+                res.render("clientes/formActualizarCliente", { datos: data, usuario: req.cookies.usuario });
+            } else {
+                res.render("clientes/formActualizarCliente", { datos: data, usuario: false });
+            }
         }
     })
 })
@@ -316,7 +331,7 @@ router.post('/validarLoginVendedor', async (req, res) => {
 
 
 //Carrito
-app.get('/agregarProductoCarrito/:id', async (req,res) =>{
+router.get('/agregarProductoCarrito/:id', async (req,res) =>{
     Producto.findOne({ _id: req.params.id }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el producto: ", err)
@@ -334,6 +349,7 @@ app.get('/agregarProductoCarrito/:id', async (req,res) =>{
                 res.cookie('productosCarrito', productosNuevoCarrito);
             }
         }
+        res.redirect('listarProductos')
     })
 })
 
