@@ -262,6 +262,7 @@ router.get('/registrarVendedor', async (req, res) => {
         res.render('vendedor/registroVendedor', { usuario: false });
     }
 });
+
 router.post('/registerVendedor', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
     const nuevoVendedor = new Vendedor({
@@ -383,7 +384,7 @@ router.post('/validarLoginVendedor', async (req, res) => {
 
 //Carrito
 router.get('/agregarProductoCarrito/:id', async (req,res) =>{
-    Producto.findOne({ _id: req.params.id }, (err, data) => {
+    Producto.findOne({_id: req.params.id }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el producto: ", err)
         } else if(data == null){
@@ -393,15 +394,30 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
         }else{
             if (req.cookies.productosCarrito){
                 productosAnterioresCarrito = req.cookies.productosCarrito;
-                productosAnterioresCarrito.push(req.params.id)
+                productosAnterioresCarrito.push(data)
                 res.cookie('productosCarrito', productosAnterioresCarrito);
+                console.log(req.cookies)
+                //res.clearCookie('productosCarrito')
             } else{
-                productosNuevoCarrito = [req.params.id] ;
+                productosNuevoCarrito = [data] ;
                 res.cookie('productosCarrito', productosNuevoCarrito);
             }
         }
-        res.redirect('listarProductos')
+        res.redirect('/listarProductos')
     })
+})
+
+//aun no hecho pagina carrito
+router.get('/carritoCompras', async (req,res) =>{
+    if (req.cookies.productosCarrito) {
+        res.render('carrito/carritoCompras', { datos: req.cookies.productosCarrito, usuario: req.cookies.usuario });
+    } else {
+        res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario });
+    }
+})
+router.get('/borrarCarritoCompras', async (req,res) =>{
+    res.clearCookie('productosCarrito')
+    res.redirect('/listarProductos')
 })
 
 module.exports = router;

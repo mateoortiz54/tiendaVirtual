@@ -21,6 +21,7 @@
             background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
         }
     </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
 </head>
 
 <body class="leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">
@@ -67,6 +68,11 @@
                     <% } %>
                     
                     <% if(usuario){ %>
+                        <% if(usuario[1] == "V"){ %> <!--Cambiar a "C" cuando los clientes tenga una tienda-->
+                        <li class="mr-3">
+                            <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/carritoCompras"><i class="material-icons">shopping_cart</i></a>
+                        </li>
+                        <% } %>
                         <li class="mr-3">
                             <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/logOut">LOG OUT</a>
                         </li>
