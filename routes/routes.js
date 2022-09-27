@@ -11,7 +11,8 @@ const Vendedores = require("../models/modelVendedor.js");
 
 //home-index
 router.get('/home', async (req, res) => {
-    res.render('home');
+    const data = await Producto.find()
+    res.render('home',{datos:data});
 });
 
 //Producto
@@ -223,10 +224,5 @@ router.post('/validarLoginVendedor', async (req, res) => {
         }
     })
 })
-
-
-
-
-
 
 module.exports = router;
