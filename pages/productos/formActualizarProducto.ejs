@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pagina inicio</title>
+</head>
+<body>
+    <form action="/guardarActualizarProducto/<%= datos._id %>" method="post">
+
+        <input type="number" name="id" value="<%= datos._id %>" hidden>
+
+        <input type="text" name="Referencia" value="<%= datos.Referencia %>">
+        <input type="text" name="Nombre" value="<%= datos.Nombre %>">
+        <input type="text" name="Precio" value="<%= datos.Precio %>">
+        <input type="text" name="Stock" value="<%= datos.Stock %>">
+        <input type="file" name="imagen" hidden>
+
+        <input type="submit">
+    </form>
+</body>
+</html>
