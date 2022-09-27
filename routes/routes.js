@@ -8,6 +8,7 @@ const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
 const Vendedores = require("../models/modelVendedor.js");
+let alert=require('alert');
 
 //instanciamos el cookie parser
 router.use(cookieParser())
@@ -15,26 +16,26 @@ router.use(cookieParser())
 //home-index
 router.get('/home', async (req, res) => {
     const data = await Producto.find().limit(3)
-    if (req.cookies.usuario){
-        res.render('home', {datos:data, usuario: req.cookies.usuario });
-    }else{
-        res.render('home', {datos:data,usuario: false});
+    if (req.cookies.usuario) {
+        res.render('home', { datos: data, usuario: req.cookies.usuario });
+    } else {
+        res.render('home', { datos: data, usuario: false });
 
     }
-    
+
 });
 
 //Producto
 router.get('/listarProductos', async (req, res) => {
     const data = await Producto.find()
-    
-    if (req.cookies.usuario){
+
+    if (req.cookies.usuario) {
         res.render('productos/listarProductos', { datos: data, usuario: req.cookies.usuario });
-    }else{
+    } else {
         res.render('productos/listarProductos', { datos: data, usuario: false });
 
     }
-    
+
 });
 
 router.get('/eliminarProducto/:id', async (req, res) => {
@@ -105,13 +106,13 @@ router.post('/guardarActualizarProducto/:id', (req, res) => {
 
 //cliente
 router.get('/registrarCliente', async (req, res) => {
-    if (req.cookies.usuario){
+    if (req.cookies.usuario) {
         res.render('clientes/registroCliente', { usuario: req.cookies.usuario });
-    }else{
+    } else {
         res.render('clientes/registroCliente', { usuario: false });
 
     }
-     
+
 });
 router.post('/registerCliente', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
@@ -122,13 +123,14 @@ router.post('/registerCliente', (req, res) => {
         "totalComprado": 0,
         "historialCompras": [],
         "usuarioCliente": req.body.usuario,
+        "palabraClave": req.body.p,
         "contrasenaCliente": req.body.contrasena
     }
     )
     nuevoCliente.save();
     console.log("Se guardó el Cliente");
-    res.cookie("usuario",req.body.usuario);
-    res.redirect("home"); 
+    res.cookie("usuario", req.body.usuario);
+    res.redirect("home");
 });
 
 router.get('/listarClientes', async (req, res) => {
@@ -136,9 +138,9 @@ router.get('/listarClientes', async (req, res) => {
     const data = await Cliente.find()
     console.log(data)
     if (res.cookie.usuario) {
-        res.render('clientes/listarClientes',{datos: data, usuario: res.cookie.usuario});
-    }else{
-        res.render('clientes/listarClientes',{datos: data});
+        res.render('clientes/listarClientes', { datos: data, usuario: res.cookie.usuario });
+    } else {
+        res.render('clientes/listarClientes', { datos: data });
     }
     //res.render('clientes/listarClientes',{datos: data});
 });
@@ -181,6 +183,44 @@ router.post('/guardarActualizarCliente/:id', (req, res) => {
     })
 
 })
+
+router.get('/contrasenaClientes', async (req, res) => {
+
+    res.render('clientes/contrasenaClientes');
+});
+
+router.post('/validarContraCliente', async (req, res) => {
+    const clie = Cliente.find({ usuarioCliente: req.body.u, palabraClave: req.body.p }, (err, data) => {
+        if (err) {
+            console.log("no se puede reestrablecer la contraseña: ", err)
+        } else {
+
+            console.log('si daaaaaaaaa-------------'+ clie)
+            res.render("clientes/reestrablecerCliente", {cliente:clie})
+        }
+    })
+})
+
+router.post('/guardarContraCliente/', (req, res) => {
+    Cliente.updateOne({ _id: req.body.id }, {
+        $set: {
+            "contrasenaCliente": req.body.p
+        }
+    }, (err, info) => {
+        if (err) {
+            console.log('no dio--------------------asdassdaasdasds'+err)
+        } else {
+            res.redirect('/home')
+        }
+    })
+
+})
+
+
+
+
+
+
 
 
 
