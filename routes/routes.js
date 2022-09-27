@@ -252,6 +252,7 @@ router.get('/registrarVendedor', async (req, res) => {
         res.render('vendedor/registroVendedor', { usuario: false });
     }
 });
+
 router.post('/registerVendedor', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
     const nuevoVendedor = new Vendedor({
@@ -335,7 +336,7 @@ router.post('/validarLoginVendedor', async (req, res) => {
 
 //Carrito
 router.get('/agregarProductoCarrito/:id', async (req,res) =>{
-    Producto.findOne({ _id: req.params.id }, (err, data) => {
+    Producto.findOne({_id: req.params.id }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el producto: ", err)
         } else if(data == null){
@@ -347,13 +348,41 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
                 productosAnterioresCarrito = req.cookies.productosCarrito;
                 productosAnterioresCarrito.push(req.params.id)
                 res.cookie('productosCarrito', productosAnterioresCarrito);
+                console.log(req.cookies)
+                res.clearCookie('productosCarrito');
             } else{
                 productosNuevoCarrito = [req.params.id] ;
                 res.cookie('productosCarrito', productosNuevoCarrito);
             }
         }
-        res.redirect('listarProductos')
+        res.redirect('/listarProductos')
     })
 })
+
+//aun no hecho pagina carrito
+router.get('/carritoCompras/', async (req,res) =>{
+    Producto.find({_id: req.params.id }, (err, data) => {
+        if (err) {
+            console.log("Hubo un error encontrando el producto: ", err)
+        } else if(data == null){
+            console.log("No se encontro el producto con id: ", req.params.id)
+            res.redirect('/listarProductos')
+            
+        }else{
+            if (req.cookies.productosCarrito){
+                productosAnterioresCarrito = req.cookies.productosCarrito;
+                productosAnterioresCarrito.push(req.params.id)
+                res.cookie('productosCarrito', productosAnterioresCarrito);
+                console.log(req.cookies)
+                res.clearCookie('productosCarrito');
+            } else{
+                productosNuevoCarrito = [req.params.id] ;
+                res.cookie('productosCarrito', productosNuevoCarrito);
+            }
+        }
+        res.redirect('/listarProductos')
+    })
+})
+
 
 module.exports = router;
