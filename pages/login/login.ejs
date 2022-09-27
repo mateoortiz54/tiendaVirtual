@@ -10,17 +10,21 @@
 </head>
 
 <body>
-    <div class="login" action="/validarLoginCliente" method="post" >
+    <div class="login" method="post" >
         <h1>Login</h1>
         <form action="/validarLoginCliente" method="post">
             <input type="text" name="u" placeholder="Username" required="required" />
             <input type="password" name="p" placeholder="Password" required="required" />
 
-            <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+            <button type="submit" class="btn btn-primary btn-block btn-large">Ingresar</button>
             <div style="margin: 1em; display: flex; justify-content: center; align-items: center;">
                 <a  href="/home" style="margin-right: .5em;" class="btn btn-primary btn-block btn-large">Volver</a>  
                 <a  href="/loginVendedor" class="btn btn-primary btn-block btn-large">Soy Vendedor</a>  
             </div>
+            <div  style="text-align: center;">
+                <a style="color: white;" href="/contrasenaClientes">recuperar contraseña</a>
+            </div>
+            
         </form>
     </div>
 

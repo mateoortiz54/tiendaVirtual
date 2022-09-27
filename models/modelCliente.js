@@ -29,6 +29,11 @@ const schemaCliente = new mongoose.Schema({
         type: String,
         required: true,
     },
+    palabraClave:{
+        type: String,
+        default :'cliente',
+        required: true,
+    },
     contrasenaCliente:{
         type: String,
         required: true,
