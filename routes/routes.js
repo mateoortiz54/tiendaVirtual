@@ -14,7 +14,8 @@ router.get('/home', async(req,res) => {
 });
 router.get('/listarProductos', async(req,res) => {
     const data= await Producto.find()
-    res.render('listarProductos',{datos:data});
+    
+    res.render('productos/listarProductos',{datos:data});
 });
 
 router.get('/eliminarProducto/:id', async(req,res) => {
@@ -26,8 +27,10 @@ router.get('/eliminarProducto/:id', async(req,res) => {
 
 //Producto
 router.get('/registrarProducto', async(req,res) => {
-    res.render('registroProducto');
+    res.render('productos/registroProducto');
 });
+
+
 router.post('/registerProducto', (req,res) => {
     const nuevoProducto = new Producto({
             "Referencia": req.body.Referencia,
@@ -40,7 +43,7 @@ router.post('/registerProducto', (req,res) => {
     )
     nuevoProducto.save()
     console.log("Se guardó el producto")
-    res.redirect("/home")
+    res.redirect("/listarProductos")
 })
 
 
@@ -64,6 +67,13 @@ router.post('/registerCliente', (req,res) =>{
     console.log("Se guardó el Cliente")
     res.redirect("/home")
 })
+
+router.get('/listarClientes', async(req,res) => {
+
+    const data= await Cliente.find()
+    console.log(data)
+    res.render('clientes/listarClientes',{datos: data});
+});
 
 
 

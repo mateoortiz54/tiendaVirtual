@@ -11,15 +11,15 @@
     <meta name="description" content="Simple landind page" />
     <meta name="keywords" content="" />
     <meta name="author" content="" />
-
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
+    
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
     <!--Replace with your tailwind.css once created-->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet" />
     <!-- Define your gradient here - use online tools to find a gradient matching your branding-->
-
-
+    
+    
     <style>
         .gradient {
             background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
@@ -34,7 +34,7 @@
         <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
             <div class="pl-4 flex items-center">
                 <a class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-                    href="/Home">
+                href="/Home">
                     <!--Icon from: http://www.potlabicons.com/ -->
                     <svg class="h-8 fill-current inline" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512.005 512.005">
@@ -62,12 +62,10 @@
                         <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="#">TIENDA</a>
                     </li>
                     <li class="mr-3">
-                        <a class="inline-block py-2 px-4 text-black font-bold no-underline"
-                            href="listarClientes">CLIENTES</a>
+                        <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="listarClientes">CLIENTES</a>
                     </li>
                     <li class="mr-3">
-                        <a class="inline-block py-2 px-4 text-black font-bold no-underline"
-                            href="listarProductos">PRODUCTOS</a>
+                        <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="listarProductos">PRODUCTOS</a>
                     </li>
                     <li class="mr-3">
                         <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="#">REGISTRO</a>
@@ -75,59 +73,47 @@
                     <li class="mr-3">
                         <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="#">lOGIN</a>
                     </li>
-
+                    
                 </ul>
-
+                
             </div>
         </div>
     </nav>>
 
-    <div style="margin-top: 8em; margin-left:2em ;  margin-right: 2em; background-color: rgb(72, 77, 81);">
-        <section id="Listar Productos">
-
-            
-            <div class="row">
-                <form class="col s12" action="/registerProducto" method="post">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input  name="Nombre" id="first_name" type="text" class="validate">
-                            <label for="first_name">Nombre</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input id="last_name" name="Referencia" type="text" class="validate">
-                            <label for="last_name">Referencia</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input value="I am not editable"  name="Precio" type="number" class="validate">
-                            <label for="Precio">Precio</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input  value="I am not editable"  name="Stock" type="number" class="validate">
-                            <label for="Stock">Stock</label>
-                        </div>
-                    </div>
+    <div   style="margin-top: 8em; margin-left:2em ;  margin-right: 2em;" >
+        <section id="Listar Productos"  >
+            <table class="striped " >
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>telefono</th>
+                        <th>Ubicacion</th>
+                        <th>Total Comprado</th>
+                        <th>opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
                     
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input id="email" type="file" name="imagen" class="validate">
-                            <label for="imagen"></label>
-                        </div>
-                    </div>
+                    <% datos.forEach ( (e) => { %>
+                        <tr>
+                            <td> <%= e.nombreCliente %> </td>
+                            <td> <%= e.telCliente %> </td>
+                            <td> <%= e.ubicacion %> </td>
+                            <td> <%= e.totalComprado %> </td>
+                            <td> 
+                                <a  href="/editarProducto/<%= e._id %>">editar</a>
+                                <a href="/eliminarProducto/<%= e._id %>">Eliminar</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
 
-                    <button type="submit">Enviar</button><br>
-
-                </form>
-            </div>
-
-
+            </table>
+            
         </section>
     </div><br><br><br>
-
-
+    
+    
     <footer class="bg-white">
         <div class="container mx-auto px-8">
             <div class="w-full flex flex-col md:flex-row py-6">
@@ -145,17 +131,16 @@
 
                     </a>
                 </div>
-
+                
                 <div class="flex-1">
                     <p class="uppercase text-gray-500 md:mb-6">Legal</p>
                     <ul class="list-reset mb-6">
                         <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-                            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Terminos
-                                y condiciones...</a>
+                            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Terminos y condiciones...</a>
                         </li>
                         <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-                            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Copyright
-                                © 2022 Todos los derechos reservados</a>
+                            <a href="#"
+                                class="no-underline hover:underline text-gray-800 hover:text-pink-500">Copyright © 2022 Todos los derechos reservados</a>
                         </li>
                     </ul>
                 </div>
@@ -180,12 +165,11 @@
                     <p class="uppercase text-gray-500 md:mb-6">Compañia</p>
                     <ul class="list-reset mb-6">
                         <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-                            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Sena
-                                Ventas</a>
+                            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Sena Ventas</a>
                         </li>
                         <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-                            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Contacto
-                            </a>
+                            <a href="#"
+                                class="no-underline hover:underline text-gray-800 hover:text-pink-500">Contacto </a>
                         </li>
                     </ul>
                 </div>
@@ -277,9 +261,7 @@
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
 </html>
