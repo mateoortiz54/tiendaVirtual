@@ -1,5 +1,7 @@
 const conexion = require("../database/connectionmongoose");
+const cookieParser = require('cookie-parser')
 const express = require('express');
+const app = express();
 const router = express.Router();
 const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
@@ -7,7 +9,8 @@ const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
 const Vendedores = require("../models/modelVendedor.js");
 
-
+//instanciamos el cookie parser
+router.use(cookieParser())
 
 //home-index
 router.get('/home', async (req, res) => {
@@ -18,8 +21,8 @@ router.get('/home', async (req, res) => {
 //Producto
 router.get('/listarProductos', async (req, res) => {
     const data = await Producto.find()
-
-    res.render('productos/listarProductos', { datos: data });
+    console.log(req.cookies)
+    res.render('productos/listarProductos', { datos: data, usuario: req.cookies.usuario });
 });
 
 router.get('/eliminarProducto/:id', async (req, res) => {
@@ -104,16 +107,22 @@ router.post('/registerCliente', (req, res) => {
         "contrasenaCliente": req.body.contrasena
     }
     )
-    nuevoCliente.save()
-    console.log("Se guardó el Cliente")
-    res.redirect("/listarClientes")
-})
+    nuevoCliente.save();
+    console.log("Se guardó el Cliente");
+    res.cookie("usuario",req.body.usuario);
+    res.redirect("home"); 
+});
 
 router.get('/listarClientes', async (req, res) => {
 
     const data = await Cliente.find()
     console.log(data)
-    res.render('clientes/listarClientes', { datos: data });
+    if (res.cookie.usuario) {
+        res.render('clientes/listarClientes',{datos: data, usuario: res.cookie.usuario});
+    }else{
+        res.render('clientes/listarClientes',{datos: data});
+    }
+    //res.render('clientes/listarClientes',{datos: data});
 });
 
 router.get('/eliminarCliente/:id', async (req, res) => {
