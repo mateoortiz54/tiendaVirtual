@@ -237,6 +237,16 @@ router.post('/guardarContraCliente/:id', (req, res) => {
 })
 
 
+router.get('/perfil', async (req, res) => {
+    if (req.cookies.usuario) {
+        res.render('clientes/perfil', {usuario: req.cookies.usuario });
+    } else {
+        res.render('clientes/perfil', {usuario: false });
+    }
+});
+
+
+
 
 
 
