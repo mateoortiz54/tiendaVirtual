@@ -7,7 +7,6 @@ const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
-const Vendedores = require("../models/modelVendedor.js");
 let alert=require('alert');
 
 //instanciamos el cookie parser
@@ -226,7 +225,11 @@ router.post('/guardarContraCliente/', (req, res) => {
 
 //Vendedor
 router.get('/registrarVendedor', async (req, res) => {
-    res.render('vendedor/registroVendedor');
+    if (req.cookies.usuario) {
+        res.render('vendedor/registroVendedor', { usuario: req.cookies.usuario });
+    } else {
+        res.render('vendedor/registroVendedor', { usuario: false });
+    }
 });
 router.post('/registerVendedor', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
@@ -286,15 +289,20 @@ router.post('/validarLoginCliente', async (req, res) => {
         }
     })
 })
+
 router.get('/LoginVendedor', async (req, res) => {
-    res.render('login/LoginVendedor');
+    res.render('login/loginVendedor');
 });
 
 router.post('/validarLoginVendedor', async (req, res) => {
-    Vendedores.findOne({ usuarioVendedor: req.body.u, contrasenaVendedor: req.body.p }, (err, data) => {
+    Vendedor.findOne({ usuarioVendedor: req.body.u, contrasenaVendedor: req.body.p }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el vendedor: ", err)
-        } else {
+        }else if (data == null){
+            console.log("No logueo, ya que no encontro el usuario respuesta: "+data)
+            res.redirect("/home")
+        }else {
+            console.log("Entró, respuesta:"+data)
             res.cookie('usuario', [req.body.u, "V"]);
             res.redirect("/home")
         }
