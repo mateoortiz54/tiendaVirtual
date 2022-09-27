@@ -14,7 +14,7 @@ router.use(cookieParser())
 
 //home-index
 router.get('/home', async (req, res) => {
-    const data = await Producto.find()
+    const data = await Producto.find().limit(3)
     res.render('home',{datos:data});
 });
 
