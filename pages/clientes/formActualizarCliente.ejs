@@ -1,0 +1,42 @@
+<%- include('../partials/headers'); %>
+    
+    
+    <div style="margin-top: 8em; margin-left:2em ;  margin-right: 2em; background-color: rgb(72, 77, 81) ; margin-bottom: 2em;">
+        
+        <section >
+            <div class="row">
+                
+                <form action="/guardarActualizarCliente/<%= datos._id %>" method="post">
+
+                    <input type="number" name="id" value="<%= datos._id %>" hidden>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input value="<%= datos.nombreCliente %>"  name="nombre" id="first_name" type="text" class="validate">
+                            <label for="first_name">Nombre</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="last_name" value="<%= datos.telCliente %>" name="telCliente" type="number" class="validate">
+                            <label for="last_name">Telefono </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input value=""  name="contrasena" type="password" class="validate">
+                            <label for="contrasena">Password</label>
+                        </div>
+                    </div>
+
+                    <div class="row" style="text-align: center;">
+                        <button  class="waves-effect waves-light btn-small" type="submit">Enviar</button><br><br>
+                    </div>
+                    
+
+                </form>
+            </div>
+
+
+        </section>
+    </div>
+    
+<%- include('../partials/footer'); %>
