@@ -1,23 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pagina inicio</title>
-</head>
-<body>
-    <form action="/guardarActualizarProducto/<%= datos._id %>" method="post">
+<%- include('../partials/headers'); %>
+    
+    
+    <div style="margin-top: 8em; margin-left:2em ;  margin-right: 2em; background-color: rgb(72, 77, 81) ; margin-bottom: 2em;">
+        
+        <section id="Listar Productos">
 
-        <input type="number" name="id" value="<%= datos._id %>" hidden>
+            
+            <div class="row">
+                
+                <form action="/guardarActualizarProducto/<%= datos._id %>" method="post">
+                    <input type="number" name="id" value="<%= datos._id %>" hidden>
 
-        <input type="text" name="Referencia" value="<%= datos.Referencia %>">
-        <input type="text" name="Nombre" value="<%= datos.Nombre %>">
-        <input type="text" name="Precio" value="<%= datos.Precio %>">
-        <input type="text" name="Stock" value="<%= datos.Stock %>">
-        <input type="file" name="imagen" hidden>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input value="<%= datos.Nombre %>"  name="Nombre" id="first_name" type="text" class="validate">
+                            <label for="first_name">Nombre</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="last_name" value="<%= datos.Referencia %>" name="Referencia" type="text" class="validate">
+                            <label for="last_name">Referencia</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input value="<%= datos.Precio %>"  name="Precio" type="number" class="validate">
+                            <label for="Precio">Precio</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input  value="<%= datos.Stock %>"  name="Stock" type="number" class="validate">
+                            <label for="Stock">Stock</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="email" type="file"  hidden name="imagen" class="validate">
+                            <label for="imagen"></label>
+                        </div>
+                    </div>
 
-        <input type="submit">
-    </form>
-</body>
-</html>
+                    <div class="row" style="text-align: center;">
+                        <button  class="waves-effect waves-light btn-small" type="submit">Enviar</button><br><br>
+                    </div>
+                    
+
+                </form>
+            </div>
+
+
+        </section>
+    </div>
+    
+<%- include('../partials/footer'); %>
