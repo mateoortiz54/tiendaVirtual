@@ -13,7 +13,7 @@ const SchemaProducto = new mongoose.Schema({
         required: true,
     },
     Precio: {
-        type: parseFloat(Number),
+        type: Number,
         default: 0,
         min: 0,
     },

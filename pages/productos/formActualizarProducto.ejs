@@ -7,12 +7,15 @@
     <title>pagina inicio</title>
 </head>
 <body>
-    <form action="/registerProducto" method="post">
-        <input type="text" name="Referencia" placeholder="Referencia">
-        <input type="text" name="Nombre" placeholder="Nombre">
-        <input type="text" name="Precio" placeholder="Precio">
-        <input type="text" name="Stock" placeholder="Stock">
-        <input type="file" name="imagen">
+    <form action="/guardarActualizarProducto/<%= datos._id %>" method="post">
+
+        <input type="number" name="id" value="<%= datos._id %>" hidden>
+
+        <input type="text" name="Referencia" value="<%= datos.Referencia %>">
+        <input type="text" name="Nombre" value="<%= datos.Nombre %>">
+        <input type="text" name="Precio" value="<%= datos.Precio %>">
+        <input type="text" name="Stock" value="<%= datos.Stock %>">
+        <input type="file" name="imagen" hidden>
 
         <input type="submit">
     </form>

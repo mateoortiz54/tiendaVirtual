@@ -12,53 +12,30 @@ const Venta = require('../models/modelVenta.js');
 router.get('/home', async(req,res) => {
     res.render('home');
 });
+
+
+//Producto
 router.get('/listarProductos', async(req,res) => {
     const data= await Producto.find()
-    res.render('listarProductos',{datos:data});
+    res.render('productos/listarProductos',{datos:data});
 });
 
 router.get('/eliminarProducto/:id', async(req,res) => {
     const id=req.params.id
-    Producto.deleteOne(id)
-    res.redirect('/listarProductos')
-});
-
-
-//Producto
-router.get('/registrarProducto', async(req,res) => {
-    res.render('registroProducto');
-});
-
-router.get('/actualizarProducto/:id', (req,res) =>{
-    Producto.findOne({_id: req.params.id},(err,data) =>{
+    Producto.deleteOne({_id:req.params.id},(err,info)=>{
         if (err){
-            alert("Hubo un error encontrando el usuario: ",  err) 
+            console.log("Hubo un error eliminando el producto: ",  err) 
         }else{
-            res.render("productos/formActualizarProducto", {datos:data})
+            console.log("Se borró");
+            res.redirect('/listarProductos');
         }
     })
-})
+    
+});
 
-router.post('/formActualizarProducto/', (req,res) =>{
-    Producto.updateOne({_id: req.body.id},{
-        $set: {
-            "Referencia": req.body.Referencia,
-            "Nombre": req.body.Nombre,
-            "Precio": req.body.Precio,
-            "Stock": req.body.Stock,
-            "Imagen": req.body.imagen,
-            "Habilitado": true
-        }
-    }, (err, info)=>{
-        if(err){
-            alert(err)
-        }else{
-            res.redirect('home')
-        }
-    })
-
-})
-
+router.get('/registrarProducto', async(req,res) => {
+    res.render('productos/registroProducto');
+});
 router.post('/registerProducto', (req,res) => {
     const nuevoProducto = new Producto({
             "Referencia": req.body.Referencia,
@@ -73,6 +50,38 @@ router.post('/registerProducto', (req,res) => {
     console.log("Se guardó el producto")
     res.redirect("/home")
 })
+
+router.get('/editarProducto/:id', (req,res) =>{
+    Producto.findOne({_id: req.params.id},(err,data) =>{
+        if (err){
+            console.log("Hubo un error encontrando el producto: ",  err) 
+        }else{
+            res.render("productos/formActualizarProducto", {datos:data})
+        }
+    })
+})
+
+router.post('/guardarActualizarProducto/:id', (req,res) =>{
+    Producto.updateOne({_id: req.params.id},{
+        $set: {
+            "Referencia": req.body.Referencia,
+            "Nombre": req.body.Nombre,
+            "Precio": req.body.Precio,
+            "Stock": req.body.Stock,
+            "Imagen": req.body.imagen,
+            "Habilitado": true
+        }
+    }, (err, info)=>{
+        if(err){
+            console.log(err)
+        }else{
+            res.redirect('/home')
+        }
+    })
+
+})
+
+
 
 
 //cliente
