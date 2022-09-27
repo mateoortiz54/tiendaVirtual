@@ -140,10 +140,10 @@ router.get('/listarClientes', async (req, res) => {
 
     const data = await Cliente.find()
     console.log(data)
-    if (res.cookie.usuario) {
+    if (req.cookies.usuario) {
         res.render('clientes/listarClientes', { datos: data, usuario: req.cookies.usuario });
     } else {
-            res.render('clientes/listarClientes', { datos: data, usuario: false });
+        res.render('clientes/listarClientes', { datos: data, usuario: false });
     }
 });
 
