@@ -15,20 +15,17 @@
     <div class="login">
         <div class="login-triangle"></div>
 
-        <h2 class="login-header">Log in</h2>
+        <h2 class="login-header">Reestrablecer Contraseña</h2>
 
-        <form class="login-container" action="/validarLoginVendedor" method="post">
-            <p><input type="email" placeholder="Email" name="u"></p>
-            <p><input type="password" placeholder="Password" name="p"></p>
-            <p><input type="submit" value="Log in"></p>
+        <form class="login-container" action="/validarContraVendedor" method="post">
+            <p><input type="email" placeholder="Usuario" name="u"></p>
+            <p><input type="text" placeholder="Palabra Clave" name="p"></p>
+            <p><input type="submit" value="Reestrablecer"></p>
         </form>
         <div style="margin: 1em; display: flex; justify-content: center; align-items: center;">
             <a href="/home" style="margin-right: 1.5em;" class="btn btn-warning btn-block btn-large">Volver</a>
-            <div  style="text-align: center;">
-                <a style="color: white;" href="/contrasenaVendedor">recuperar contraseña</a>
-            </div>
-
         </div>
+        
         <style>
             @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 

@@ -269,6 +269,44 @@ router.post('/registerVendedor', (req, res) => {
     res.redirect("/home")
 })
 
+router.get('/contrasenaVendedor', async (req, res) => {
+
+    res.render('vendedor/contrasenaVendedor');
+});
+
+router.post('/validarContraVendedor', async (req, res) => {
+    const clie = Vendedor.findOne({ usuarioCliente: req.body.u, palabraClave: req.body.p }, (err, data) => {
+        if (err) {
+            console.log("Hubo un error encontrando el Vendedor: ", err)
+        } else if (data == null) {
+            console.log("No logueo, ya que no encontro el usuario respuesta: " + data)
+            res.redirect("/home")
+        }else {
+            console.log("Entró, respuesta:" + data)
+            res.render("vendedor/reestrablecerVendedor", { vendedor: data })
+        }
+    })
+})
+
+router.post('/guardarContraVendedor/:id', (req, res) => {
+    Vendedor.updateOne({ _id: req.params.id }, {
+        $set: {
+            "contrasenaVendedor": req.body.p
+        }
+    }, (err, data) => {
+        if (err) {
+            console.log('no dio--------------------asdassdaasdasds' + err)
+            res.redirect('/contrasenaVendedor')
+        } else {
+            console.log('dio--------------------'+data)
+            res.redirect('/home')
+        }
+    })
+})
+
+
+
+
 //Venta
 // router.get('/registrarVenta', async(req,res) => {
 //     res.render('venta/registroVenta');
