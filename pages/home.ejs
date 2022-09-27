@@ -1,4 +1,8 @@
-<%- include('partials/headers'); %>
+<% if(usuario){ %>
+    <%- include('partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('partials/headers', {usuario:false})%>
+ <% } %>
     <!--Hero-->
     <div class="pt-24">
         <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">

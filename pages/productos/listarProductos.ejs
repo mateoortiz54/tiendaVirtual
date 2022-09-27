@@ -1,8 +1,8 @@
-<%- include('../partials/headers'); %>
-
-    
-    
-
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
     <div   style="margin-top: 8em; margin-left:2em ;  margin-right: 2em;  ; margin-bottom: 2em;" >
         <section id="Listar Productos"  >
             <div style="display: flex; justify-content: space-around;">
@@ -14,9 +14,9 @@
                 
             </div><br>
             <% if(usuario){ %>
-                <h1><%= usuario %></h1>
+                <h1><%= usuario[1] %></h1>
               <% } else{ %>  
-                <h1>Chao mundo</h1>
+                <h1>No hay usuario</h1>
              <% } %>
             <table class="striped " >
                 <thead>
