@@ -1,4 +1,8 @@
-<%- include('../partials/headers'); %>
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
 
     <div style="margin-top: 8em; margin-left:2em ;  margin-right: 2em; background-color: rgb(72, 77, 81) ; margin-bottom: 2em;">
         
@@ -22,6 +26,10 @@
                         <div class="input-field col s6">
                             <input id="email" type="email" name="usuario" class="validate">
                             <label for="usuario">Email</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="palabra" type="text" name="p" class="validate">
+                            <label for="palabra">Palabra Clave</label>
                         </div>
                         <div class="input-field col s6">
                             <input id="password" type="password" name="contrasena" class="validate">

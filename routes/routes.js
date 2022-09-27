@@ -141,11 +141,10 @@ router.get('/listarClientes', async (req, res) => {
     const data = await Cliente.find()
     console.log(data)
     if (res.cookie.usuario) {
-        res.render('clientes/listarClientes', { datos: data, usuario: res.cookie.usuario });
+        res.render('clientes/listarClientes', { datos: data, usuario: req.cookies.usuario });
     } else {
-        res.render('clientes/listarClientes', { datos: data });
+            res.render('clientes/listarClientes', { datos: data, usuario: false });
     }
-    //res.render('clientes/listarClientes',{datos: data});
 });
 
 router.get('/eliminarCliente/:id', async (req, res) => {
@@ -197,8 +196,6 @@ router.post('/validarContraCliente', async (req, res) => {
         if (err) {
             console.log("no se puede reestrablecer la contraseña: ", err)
         } else {
-
-            console.log('si daaaaaaaaa-------------'+ clie)
             res.render("clientes/reestrablecerCliente", {cliente:clie})
         }
     })
@@ -231,7 +228,11 @@ router.post('/guardarContraCliente/', (req, res) => {
 
 //Vendedor
 router.get('/registrarVendedor', async (req, res) => {
-    res.render('vendedor/registroVendedor');
+    if (req.cookies.usuario) {
+        res.render('vendedor/registroVendedor', { usuario: req.cookies.usuario });
+    } else {
+        res.render('vendedor/registroVendedor', { usuario: false });
+    }
 });
 router.post('/registerVendedor', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
@@ -240,6 +241,7 @@ router.post('/registerVendedor', (req, res) => {
         "documento": req.body.documento,
         "ventasDespachadas": 0,
         "usuarioVendedor": req.body.usuario,
+        "palabraClave": req.body.p,
         "contrasenaVendedor": req.body.contrasena
     }
     )
@@ -291,6 +293,7 @@ router.post('/validarLoginCliente', async (req, res) => {
         }
     })
 })
+
 router.get('/LoginVendedor', async (req, res) => {
     res.render('login/loginVendedor');
 });

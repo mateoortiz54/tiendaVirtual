@@ -1,4 +1,8 @@
-<%- include('../partials/headers'); %>
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
 
     <div   style="margin-top: 8em; margin-left:2em ;  margin-right: 2em;" >
         <section id="Listar Productos"  >
