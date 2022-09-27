@@ -276,7 +276,11 @@ router.post('/validarLoginCliente', async (req, res) => {
     Cliente.findOne({ usuarioCliente: req.body.u, contrasenaCliente: req.body.p }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
-        } else {
+        } else if (data == null){
+            console.log("No logueo, ya que no encontro el usuario respuesta: "+data)
+            res.redirect("/home")
+        } else{
+            console.log("Entró, respuesta:"+data)
             res.cookie('usuario', [req.body.u, "C"]);
             res.redirect("/home")
         }
