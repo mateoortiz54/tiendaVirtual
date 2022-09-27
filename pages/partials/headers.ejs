@@ -66,6 +66,11 @@
                         <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/listarProductos">PRODUCTOS</a>
                     </li>
                     <% } %>
+                    <% if(usuario[1] == "C"){ %>
+                        <li class="mr-3">
+                            <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/perfil">PERFIL</a>
+                        </li>
+                    <% } %>
                     
                     <% if(usuario){ %>
                         <% if(usuario[1] == "V"){ %> <!--Cambiar a "C" cuando los clientes tenga una tienda-->
@@ -83,10 +88,8 @@
                         <li class="mr-3">
                             <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/login">lOGIN</a>
                         </li>
-                     <% } %>
-                        <li class="mr-3">
-                            <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/perfil">PERFIL</a>
-                        </li>
+                    <% } %>
+                    
                         
                 </ul>
                 

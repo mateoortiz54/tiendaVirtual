@@ -144,10 +144,10 @@
                         </section>
 
                     </div>
-                    <section class="bg-white border-b " style="width: 50%; text-align: center; margin: 0 auto; margin-bottom: 1em;">
+                    <section class="bg-white border-b " style="width: 50%;  margin: 0 auto; margin-bottom: 1em;">
                         <div class="container mx-auto flex flex-wrap pt-4 pb-12">
                             <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
-                                usuario
+                                <%= datos.nombreCliente %>
                             </h2>
                             <div class="w-full mb-4">
                                 <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
@@ -161,22 +161,32 @@
                                             Usuario
                                         </p>
                                         <div class="w-full font-bold text-xl text-gray-800 px-6">
-                                            juan@meres.com
+                                            <%= datos.usuarioCliente %>
                                         </div><br>
                                         <p class="w-full text-gray-600 text-xs md:text-sm px-6">
                                             
                                             telefono
                                         </p>
                                         <div class="w-full font-bold text-xl text-gray-800 px-6">
-                                            2272678
+                                            <%= datos.telCliente %>
                                         </div><br>
                                         <p class="w-full text-gray-600 text-xs md:text-sm px-6">
                                             
                                             Ubicacion
                                         </p>
                                         <div class="w-full font-bold text-xl text-gray-800 px-6">
-                                            latitud :ads
-                                            longitud :addasj
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Longitud y latitud</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                        <tr>
+                                                            <td><%= datos.ubicacion %></td>
+                                                        </tr>
+                                                <tbody>
+                                            </table> 
                                         </div><br>
                                         
                                         <p class="w-full text-gray-600 text-xs md:text-sm px-6">
@@ -184,18 +194,15 @@
                                             Total Comprado
                                         </p>
                                         <div class="w-full font-bold text-xl text-gray-800 px-6">
-                                            134343
+                                            <%= datos.totalComprado %>
                                         </div><br>
                                         <p class="w-full text-gray-600 text-xs md:text-sm px-6">
                                             
                                             Historial Compras
                                         </p>
                                         <div class="w-full font-bold text-xl text-gray-800 px-6">
-                                            Array[]
+                                            <%= datos.historialCompras %>
                                         </div><br>
-                                        
-
-                                        
                                     </a>
                                 </div>
 

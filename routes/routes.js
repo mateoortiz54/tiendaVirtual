@@ -239,12 +239,23 @@ router.post('/guardarContraCliente/:id', (req, res) => {
 
 router.get('/perfil', async (req, res) => {
     if (req.cookies.usuario) {
-        res.render('clientes/perfil', {usuario: req.cookies.usuario });
+        Cliente.findOne({ usuarioCliente: req.cookies.usuario}, (err, data) => {
+            if (err) {
+                console.log("Hubo un error encontrando el Cliente: ", err)
+            } else if (data == null) {
+                console.log("no hay datos: " + data)
+            }else {
+                console.log("Entró, respuesta:" + data)
+                res.render('clientes/perfil', {usuario: req.cookies.usuario,datos: data });
+            }
+        })
+       
     } else {
         res.render('clientes/perfil', {usuario: false });
     }
 });
 
+ 
 
 
 
@@ -415,6 +426,7 @@ router.get('/carritoCompras', async (req,res) =>{
         res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario });
     }
 })
+
 router.get('/borrarCarritoCompras', async (req,res) =>{
     res.clearCookie('productosCarrito')
     res.redirect('/listarProductos')
