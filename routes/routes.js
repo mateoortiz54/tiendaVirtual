@@ -17,6 +17,37 @@ router.get('/home', async(req,res) => {
 router.get('/registrarProducto', async(req,res) => {
     res.render('registroProducto');
 });
+
+router.get('/actualizarProducto/:id', (req,res) =>{
+    Producto.findOne({_id: req.params.id},(err,data) =>{
+        if (err){
+            alert("Hubo un error encontrando el usuario: ",  err) 
+        }else{
+            res.render("productos/formActualizarProducto", {datos:data})
+        }
+    })
+})
+
+router.post('/formActualizarProducto/', (req,res) =>{
+    Producto.updateOne({_id: req.body.id},{
+        $set: {
+            "Referencia": req.body.Referencia,
+            "Nombre": req.body.Nombre,
+            "Precio": req.body.Precio,
+            "Stock": req.body.Stock,
+            "Imagen": req.body.imagen,
+            "Habilitado": true
+        }
+    }, (err, info)=>{
+        if(err){
+            alert(err)
+        }else{
+            res.redirect('home')
+        }
+    })
+
+})
+
 router.post('/registerProducto', (req,res) => {
     const nuevoProducto = new Producto({
             "Referencia": req.body.Referencia,
