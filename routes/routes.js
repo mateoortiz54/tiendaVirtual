@@ -207,31 +207,34 @@ router.get('/contrasenaClientes', async (req, res) => {
 });
 
 router.post('/validarContraCliente', async (req, res) => {
-    const clie = Cliente.find({ usuarioCliente: req.body.u, palabraClave: req.body.p }, (err, data) => {
+    const clie = Cliente.findOne({ usuarioCliente: req.body.u, palabraClave: req.body.p }, (err, data) => {
         if (err) {
-            console.log("no se puede reestrablecer la contraseña: ", err)
-        } else {
-            res.render("clientes/reestrablecerCliente", {cliente:clie})
+            console.log("Hubo un error encontrando el Cliente: ", err)
+        } else if (data == null) {
+            console.log("No logueo, ya que no encontro el usuario respuesta: " + data)
+            res.redirect("/home")
+        }else {
+            console.log("Entró, respuesta:" + data)
+            res.render("clientes/reestrablecerCliente", { cliente: data })
         }
     })
 })
 
-router.post('/guardarContraCliente/', (req, res) => {
-    Cliente.updateOne({ _id: req.body.id }, {
+router.post('/guardarContraCliente/:id', (req, res) => {
+    Cliente.updateOne({ _id: req.params.id }, {
         $set: {
             "contrasenaCliente": req.body.p
         }
-    }, (err, info) => {
+    }, (err, data) => {
         if (err) {
-            console.log('no dio--------------------asdassdaasdasds'+err)
+            console.log('no dio--------------------asdassdaasdasds' + err)
+            res.redirect('/contrasenaClientes')
         } else {
+            console.log('dio--------------------'+data)
             res.redirect('/home')
         }
     })
-
 })
-
-
 
 
 
@@ -298,11 +301,11 @@ router.post('/validarLoginCliente', async (req, res) => {
     Cliente.findOne({ usuarioCliente: req.body.u, contrasenaCliente: req.body.p }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
-        } else if (data == null){
-            console.log("No logueo, ya que no encontro el usuario respuesta: "+data)
+        } else if (data == null) {
+            console.log("No logueo, ya que no encontro el usuario respuesta: " + data)
             res.redirect("/home")
-        } else{
-            console.log("Entró, respuesta:"+data)
+        } else {
+            console.log("Entró, respuesta:" + data)
             res.cookie('usuario', [req.body.u, "C"]);
             res.redirect("/home")
         }
