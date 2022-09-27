@@ -14,14 +14,26 @@ router.use(cookieParser())
 
 //home-index
 router.get('/home', async (req, res) => {
-    res.render('home');
+    if (req.cookies.usuario){
+        res.render('home', { usuario: req.cookies.usuario });
+    }else{
+        res.render('home', {usuario: false});
+
+    }
+    
 });
 
 //Producto
 router.get('/listarProductos', async (req, res) => {
     const data = await Producto.find()
-    console.log(req.cookies)
-    res.render('productos/listarProductos', { datos: data, usuario: req.cookies.usuario });
+    
+    if (req.cookies.usuario){
+        res.render('productos/listarProductos', { datos: data, usuario: req.cookies.usuario });
+    }else{
+        res.render('productos/listarProductos', { datos: data, usuario: false });
+
+    }
+    
 });
 
 router.get('/eliminarProducto/:id', async (req, res) => {
@@ -92,7 +104,13 @@ router.post('/guardarActualizarProducto/:id', (req, res) => {
 
 //cliente
 router.get('/registrarCliente', async (req, res) => {
-    res.render('clientes/registroCliente');
+    if (req.cookies.usuario){
+        res.render('clientes/registroCliente', { usuario: req.cookies.usuario });
+    }else{
+        res.render('clientes/registroCliente', { usuario: false });
+
+    }
+     
 });
 router.post('/registerCliente', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
@@ -210,11 +228,17 @@ router.get('/Login', async (req, res) => {
     res.render('login/login');
 });
 
+router.get('/LogOut', async (req, res) => {
+    res.clearCookie('usuario');
+    res.redirect('home');
+});
+
 router.post('/validarLoginCliente', async (req, res) => {
     Cliente.findOne({ usuarioCliente: req.body.u, contrasenaCliente: req.body.p }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
         } else {
+            res.cookie('usuario', [req.body.u, "C"]);
             res.redirect("/home")
         }
     })
@@ -228,6 +252,7 @@ router.post('/validarLoginVendedor', async (req, res) => {
         if (err) {
             console.log("Hubo un error encontrando el vendedor: ", err)
         } else {
+            res.cookie('usuario', [req.body.u, "V"]);
             res.redirect("/home")
         }
     })

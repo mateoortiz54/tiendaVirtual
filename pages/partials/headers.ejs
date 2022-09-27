@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>
-        Tailwind Starter Template - Landing Page Template: Tailwind Toolbox
+        Landing Page Template: Tailwind Toolbox
     </title>
     <meta name="description" content="Simple landind page" />
     <meta name="keywords" content="" />
@@ -56,18 +56,28 @@
                     <li class="mr-3">
                         <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="#">TIENDA</a>
                     </li>
-                    <li class="mr-3">
-                        <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/listarClientes">CLIENTES</a>
-                    </li>
+                    <% if(usuario[1] == "V"){ %>
+                        <li class="mr-3">
+                            <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/listarClientes">CLIENTES</a>
+                        </li>
+                        
                     <li class="mr-3">
                         <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/listarProductos">PRODUCTOS</a>
                     </li>
-                    <li class="mr-3">
-                        <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/registrarCliente">REGISTRO</a>
-                    </li>
-                    <li class="mr-3">
-                        <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/login">lOGIN</a>
-                    </li>
+                    <% } %>
+                    
+                    <% if(usuario){ %>
+                        <li class="mr-3">
+                            <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/logOut">LOG OUT</a>
+                        </li>
+                      <% } else{ %>
+                        <li class="mr-3">
+                            <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/registrarCliente">REGISTRO</a>
+                        </li>  
+                        <li class="mr-3">
+                            <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="/login">lOGIN</a>
+                        </li>
+                     <% } %>
                     
                 </ul>
                 
