@@ -137,11 +137,10 @@ router.get('/listarClientes', async (req, res) => {
     const data = await Cliente.find()
     console.log(data)
     if (res.cookie.usuario) {
-        res.render('clientes/listarClientes', { datos: data, usuario: res.cookie.usuario });
+        res.render('clientes/listarClientes', { datos: data, usuario: req.cookies.usuario });
     } else {
-        res.render('clientes/listarClientes', { datos: data });
+            res.render('clientes/listarClientes', { datos: data, usuario: false });
     }
-    //res.render('clientes/listarClientes',{datos: data});
 });
 
 router.get('/eliminarCliente/:id', async (req, res) => {
@@ -238,6 +237,7 @@ router.post('/registerVendedor', (req, res) => {
         "documento": req.body.documento,
         "ventasDespachadas": 0,
         "usuarioVendedor": req.body.usuario,
+        "palabraClave": req.body.p,
         "contrasenaVendedor": req.body.contrasena
     }
     )
