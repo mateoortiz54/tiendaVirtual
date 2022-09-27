@@ -194,8 +194,6 @@ router.post('/validarContraCliente', async (req, res) => {
         if (err) {
             console.log("no se puede reestrablecer la contraseña: ", err)
         } else {
-
-            console.log('si daaaaaaaaa-------------'+ clie)
             res.render("clientes/reestrablecerCliente", {cliente:clie})
         }
     })
