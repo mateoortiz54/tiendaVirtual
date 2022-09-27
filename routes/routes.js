@@ -384,12 +384,12 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
         }else{
             if (req.cookies.productosCarrito){
                 productosAnterioresCarrito = req.cookies.productosCarrito;
-                productosAnterioresCarrito.push(req.params.id)
+                productosAnterioresCarrito.push(data)
                 res.cookie('productosCarrito', productosAnterioresCarrito);
                 console.log(req.cookies)
-                res.clearCookie('productosCarrito');
+                //res.clearCookie('productosCarrito')
             } else{
-                productosNuevoCarrito = [req.params.id] ;
+                productosNuevoCarrito = [data] ;
                 res.cookie('productosCarrito', productosNuevoCarrito);
             }
         }
@@ -398,29 +398,16 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
 })
 
 //aun no hecho pagina carrito
-router.get('/carritoCompras/', async (req,res) =>{
-    Producto.find({_id: req.params.id }, (err, data) => {
-        if (err) {
-            console.log("Hubo un error encontrando el producto: ", err)
-        } else if(data == null){
-            console.log("No se encontro el producto con id: ", req.params.id)
-            res.redirect('/listarProductos')
-            
-        }else{
-            if (req.cookies.productosCarrito){
-                productosAnterioresCarrito = req.cookies.productosCarrito;
-                productosAnterioresCarrito.push(req.params.id)
-                res.cookie('productosCarrito', productosAnterioresCarrito);
-                console.log(req.cookies)
-                res.clearCookie('productosCarrito');
-            } else{
-                productosNuevoCarrito = [req.params.id] ;
-                res.cookie('productosCarrito', productosNuevoCarrito);
-            }
-        }
-        res.redirect('/listarProductos')
-    })
+router.get('/carritoCompras', async (req,res) =>{
+    if (req.cookies.productosCarrito) {
+        res.render('carrito/carritoCompras', { datos: req.cookies.productosCarrito, usuario: req.cookies.usuario });
+    } else {
+        res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario });
+    }
 })
-
+router.get('/borrarCarritoCompras', async (req,res) =>{
+    res.clearCookie('productosCarrito')
+    res.redirect('/listarProductos')
+})
 
 module.exports = router;
