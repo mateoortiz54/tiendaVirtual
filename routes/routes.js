@@ -12,6 +12,17 @@ const Venta = require('../models/modelVenta.js');
 router.get('/home', async(req,res) => {
     res.render('home');
 });
+router.get('/listarProductos', async(req,res) => {
+    const data= await Producto.find()
+    res.render('listarProductos',{datos:data});
+});
+
+router.get('/eliminarProducto/:id', async(req,res) => {
+    const id=req.params.id
+    Producto.deleteOne(id)
+    res.redirect('/listarProductos')
+});
+
 
 //Producto
 router.get('/registrarProducto', async(req,res) => {
