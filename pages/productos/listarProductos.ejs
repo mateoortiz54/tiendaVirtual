@@ -92,7 +92,11 @@
                 </a>
                 
             </div><br>
-            
+            <% if(usuario){ %>
+                <h1><%= usuario %></h1>
+              <% } else{ %>  
+                <h1>Chao mundo</h1>
+             <% } %>
             <table class="striped " >
                 <thead>
                     <tr>

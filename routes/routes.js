@@ -1,24 +1,42 @@
 const conexion = require("../database/connectionmongoose");
+var cookieParser = require('cookie-parser')
 const express = require('express');
+const app = express();
 const router = express.Router();
 const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
 
-
+//instanciamos el cookie parser
+router.use(cookieParser())
 
 //home-index
 router.get('/home', async(req,res) => {
     res.render('home');
 });
 
+router.get("/read", (req, res) => {
 
+    let response = "Not logged in!";
+    console.log(req.cookies)
+    if(req.cookies.usuario == "true") {
+        response = "Yup! You are logged in!";
+    }
+
+    res.send(response);
+});
 //Producto
 router.get('/listarProductos', async(req,res) => {
-    const data= await Producto.find()
+    const data= await Producto.find();
+    console.log("cookies: ", req.cookies);
+    if (req.cookies.usuario) {
+        res.render('productos/listarProductos',{datos:data, usuario: req.cookies.usuario});
+    }else{
+        res.render('productos/listarProductos',{datos:data, usuario: false});
+    }
     
-    res.render('productos/listarProductos',{datos:data});
+    //res.render('productos/listarProductos',{datos:data});
 });
 
 router.get('/eliminarProducto/:id', async(req,res) => {
@@ -103,16 +121,22 @@ router.post('/registerCliente', (req,res) =>{
             "contrasenaCliente": req.body.contrasena
         }
     )
-    nuevoCliente.save()
-    console.log("Se guardó el Cliente")
-    res.redirect("/home")
-})
+    nuevoCliente.save();
+    console.log("Se guardó el Cliente");
+    res.cookie("usuario",req.body.usuario);
+    res.redirect("home"); 
+});
 
 router.get('/listarClientes', async(req,res) => {
 
     const data= await Cliente.find()
     console.log(data)
-    res.render('clientes/listarClientes',{datos: data});
+    if (res.cookie.usuario) {
+        res.render('clientes/listarClientes',{datos: data, usuario: res.cookie.usuario});
+    }else{
+        res.render('clientes/listarClientes',{datos: data});
+    }
+    //res.render('clientes/listarClientes',{datos: data});
 });
 
 
