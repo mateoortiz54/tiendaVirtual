@@ -7,8 +7,7 @@ const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
-const Vendedores = require("../models/modelVendedor.js");
-let alert=require('alert');
+//let alert=require('alert');
 
 //instanciamos el cookie parser
 router.use(cookieParser())
@@ -44,7 +43,7 @@ router.get('/eliminarProducto/:id', async (req, res) => {
         if (err) {
             console.log("Hubo un error eliminando el producto: ", err)
         } else {
-            console.log("Se borró");
+            console.log("Se borró"+info);
             res.redirect('/listarProductos');
         }
     })
@@ -75,7 +74,11 @@ router.get('/editarProducto/:id', (req, res) => {
     Producto.findOne({ _id: req.params.id }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el producto: ", err)
-        } else {
+        } else if(data == null){
+            console.log("No se encontro el producto con id: ", req.params.id)
+            res.redirect('/listarProductos')
+            
+        }else{
             res.render("productos/formActualizarProducto", { datos: data })
         }
     })
@@ -289,16 +292,44 @@ router.post('/validarLoginCliente', async (req, res) => {
     })
 })
 router.get('/LoginVendedor', async (req, res) => {
-    res.render('login/LoginVendedor');
+    res.render('login/loginVendedor');
 });
 
 router.post('/validarLoginVendedor', async (req, res) => {
-    Vendedores.findOne({ usuarioVendedor: req.body.u, contrasenaVendedor: req.body.p }, (err, data) => {
+    Vendedor.findOne({ usuarioVendedor: req.body.u, contrasenaVendedor: req.body.p }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el vendedor: ", err)
-        } else {
+        } else if (data == null) {
+            console.log("No logueo, ya que no encontro el usuario, respuesta: "+data)
+            res.redirect("/home")
+        }else{
+            console.log("Entró, respuesta:"+data)
             res.cookie('usuario', [req.body.u, "V"]);
             res.redirect("/home")
+        }
+    })
+})
+
+
+
+//Carrito
+app.get('/agregarProductoCarrito/:id', async (req,res) =>{
+    Producto.findOne({ _id: req.params.id }, (err, data) => {
+        if (err) {
+            console.log("Hubo un error encontrando el producto: ", err)
+        } else if(data == null){
+            console.log("No se encontro el producto con id: ", req.params.id)
+            res.redirect('/listarProductos')
+            
+        }else{
+            if (req.cookies.productosCarrito){
+                productosAnterioresCarrito = req.cookies.productosCarrito;
+                productosAnterioresCarrito.push(req.params.id)
+                res.cookie('productosCarrito', productosAnterioresCarrito);
+            } else{
+                productosNuevoCarrito = [req.params.id] ;
+                res.cookie('productosCarrito', productosNuevoCarrito);
+            }
         }
     })
 })
