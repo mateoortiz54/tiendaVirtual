@@ -413,9 +413,14 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
 //aun no hecho pagina carrito
 router.get('/carritoCompras', async (req,res) =>{
     if (req.cookies.productosCarrito) {
-        res.render('carrito/carritoCompras', { datos: req.cookies.productosCarrito, usuario: req.cookies.usuario });
+        var precioTotal = 0;
+        const lista = req.cookies.productosCarrito;
+        lista.forEach(i => {
+            precioTotal = precioTotal + i.Precio
+        });
+        res.render('carrito/carritoCompras', { datos: req.cookies.productosCarrito, usuario: req.cookies.usuario, precioTotal: precioTotal });
     } else {
-        res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario });
+        res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario, precioTotal: false });
     }
 })
 

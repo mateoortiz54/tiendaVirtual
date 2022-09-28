@@ -53,8 +53,23 @@
                             </tr>
                         <% }) %>
                     </tbody>
-
-    
+                    <% if(precioTotal){ %>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>
+                                    Total:
+                                </th>
+                                <th>
+                                    $ <%= precioTotal %> 
+                                </th>
+                                <th><a class="waves-effect waves-dark btn-small" href="/comprar">Comprar</a></th>
+                            </tr>
+                        </tfoot>
+                    <% } %>
                 </table>
                 
 
