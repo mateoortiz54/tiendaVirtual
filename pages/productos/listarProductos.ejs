@@ -3,18 +3,19 @@
   <% } else{ %>  
     <%- include('../partials/headers', {usuario:false})%>
  <% } %>
-    <div   style="margin-top: 8em; margin-left:2em ;  margin-right: 2em;  ; margin-bottom: 2em;" >
+
+    <div   style="margin-top: 4em; margin-left:2em ;  margin-right: 2em;  ; margin-bottom: 4em;" >
         <section id="Listar Productos"  >
             <div style="display: flex; justify-content: space-around;">
                 <a
-                class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+                class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-4 py-6 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
                 href="/registrarProducto">
                 Registrar producto
                 </a>
                 
             </div><br>
             
-            <table class="striped " >
+            <table class="striped  bg-black" style="text-align: center;" id="example" >
                 <thead>
                     <tr>
                         <th>Nombre</th>
