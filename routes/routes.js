@@ -67,6 +67,7 @@ router.post('/registerProducto', (req, res) => {
         "Precio": req.body.Precio,
         "Stock": req.body.Stock,
         "Imagen": req.body.imagen,
+        "vendedorProducto": req.cookies.usuario[0],
         "Habilitado": true
     }
     )
