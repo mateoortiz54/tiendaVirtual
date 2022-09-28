@@ -15,7 +15,7 @@ $(document).ready(function () {
   $('#example').DataTable({
       dom: 'Bfrtip',
       buttons: [
-          //'pdf'
+          //'print'
       ],
       language: {
         "decimal": ",",
