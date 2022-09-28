@@ -1,7 +1,11 @@
-function suma (a,b){
-  return a + b;
+function validar(params) {
+  window.location.href = params
 }
 
-function alertica(){
-  alert("Hola mundo")
+
+
+function eliminar(params){
+
+  return confirm('Desea Continuar Con la operacion?') ? window.location.href=params : console.log('operacion Abortada')
+
 }

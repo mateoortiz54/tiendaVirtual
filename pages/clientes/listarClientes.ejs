@@ -25,7 +25,7 @@
                             <td> <%= e.totalComprado %> </td>
                             <td> 
                                 <a  class="waves-effect waves-light btn-small" href="/editarCliente/<%= e._id %>">editar</a>
-                                <a  class="waves-effect waves-light btn-small" href="/eliminarCliente/<%= e._id %>">Eliminar</a>
+                                <a  class="waves-effect waves-light btn-small" onclick="eliminar('/eliminarCliente/<%= e._id %>')" >Eliminar</a>
                             </td>
                         </tr>
                     <% }) %>

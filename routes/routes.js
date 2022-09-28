@@ -444,7 +444,4 @@ router.get('/tienda', async (req,res) =>{
         res.render('tienda/tienda', { datos: data, usuario: false });
     }
 })
-
-
-
 module.exports = router;
