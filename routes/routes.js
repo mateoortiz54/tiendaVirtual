@@ -7,7 +7,7 @@ const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
-const fecha = require('../public/js/funciones.js');
+const fecha = require('../public/js/fecha.js');
 const Productos = require("../models/modelProducto.js");
 //let alert=require('alert');
 
