@@ -10,11 +10,6 @@
                     Carrito de Compras
                 </h1>
             </div>
-            <!-- <% if(usuario){ %>
-                <h1><%= usuario[1] %></h1>
-              <% } else{ %>  
-                <h1>No hay usuario</h1>
-             <% } %> -->
             <% if(datos){ %>
                 <div style="display: flex; justify-content: space-around;">
                     <a
@@ -47,7 +42,7 @@
                                 <td> <%= e.Habilitado %> </td>
                                 <td> <%= e.imagen %> </td>
                                 <td> 
-                                    <a class="waves-effect waves-light btn-small" href="/eliminarProducto/<%= e._id %>">Eliminar</a>
+                                    <a class="waves-effect waves-light btn-small" href="/eliminarProductoCarritoCompras/<%= e._id %>">Eliminar</a>
                                     <!--<button class="waves-effect waves-light btn-small" onclick="alertica()" name="action">Alertica</button>-->
                                 </td>
                             </tr>
@@ -61,7 +56,7 @@
                                 <th></th>
                                 <th></th>
                                 <th>
-                                    Total:
+                                    SubTotal:
                                 </th>
                                 <th>
                                     $ <%= precioTotal %> 

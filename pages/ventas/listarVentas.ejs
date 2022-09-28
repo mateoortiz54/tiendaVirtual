@@ -1,0 +1,56 @@
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
+    <div   style="margin-top: 8em; margin-left:2em ;  margin-right: 2em;  ; margin-bottom: 2em;" >
+        <section id="Listar Productos"  >
+            <!-- <div style="display: flex; justify-content: space-around;">
+                <a
+                class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+                href="/registrarProducto">
+                Registrar producto
+                </a>
+                
+            </div><br> -->
+            
+            <table class="striped " >
+                <thead>
+                    <tr>
+                        <th>productos de la Venta</th>
+                        <th>subtotal de la venta</th>
+                        <th>total de la Venta</th>
+                        <th>fecha de la Venta</th>
+                        <th>impuesto de la Venta</th>
+                        <th>cliente</th>
+                        <th>Vendedor</th>
+                        <th>opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <% datos.forEach ( (e) => { %>
+                        <tr>
+                            <td> <%= e.productosVenta %> </td>
+                            <td> <%= e.subTotal %> </td>
+                            <td> <%= e.totalVenta %> </td>
+                            <td> <%= e.fechaVenta %> </td>
+                            <td> <%= e.impuestoVenta %> </td>
+                            <td> <%= e.cliente %> </td>
+                            <td> <%= e.Vendedor %> </td>
+                            <td> 
+                                
+                                <!-- <a class="waves-effect waves-light btn-small" href="/editarProducto/<%= e._id %>">editar</a> -->
+                                <a class="waves-effect waves-light btn-small" href="/eliminarVenta/<%= e._id %>">Eliminar</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+
+            </table>
+            
+        </section>
+    </div>
+    
+    
+<%- include('../partials/footer'); %>

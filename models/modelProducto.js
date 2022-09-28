@@ -26,11 +26,6 @@ const SchemaProducto = new mongoose.Schema({
         type: String,
         default: "No tiene imagen",
     },
-    vendedorProducto:{
-        type: String,
-        required: true,
-        default: "Vendedor",
-    },
     Habilitado:{
         type: Boolean,
         required: true,

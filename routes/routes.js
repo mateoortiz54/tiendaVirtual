@@ -7,7 +7,8 @@ const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
-//const suma = require('../public/js/funciones.js')
+const fecha = require('../public/js/funciones.js');
+const Productos = require("../models/modelProducto.js");
 //let alert=require('alert');
 
 //instanciamos el cookie parser
@@ -67,7 +68,6 @@ router.post('/registerProducto', (req, res) => {
         "Precio": req.body.Precio,
         "Stock": req.body.Stock,
         "Imagen": req.body.imagen,
-        "vendedorProducto": req.cookies.usuario[0],
         "Habilitado": true
     }
     )
@@ -321,25 +321,6 @@ router.post('/guardarContraVendedor/:id', (req, res) => {
 
 
 
-//Venta
-// router.get('/registrarVenta', async(req,res) => {
-//     res.render('venta/registroVenta');
-// });
-// router.post('/registerVenta', (req,res) =>{
-//     ubicacion = [req.body.ubiLat, req.body.ubiLong];
-//     const nuevaVenta = new Venta({
-//             "productosVenta": req.body.nombre,
-//             "documento": req.body.documento,
-//             "ventasDespachadas": 0,
-//             "usuarioventa": req.body.usuario,
-//             "contrasenaventa": req.body.contrasena
-//         }
-//     )
-//     nuevaVenta.save()
-//     console.log("Se guardó el venta")
-//     res.redirect("/home")
-// })
-
 //Login
 router.get('/Login', async (req, res) => {
     res.render('login/login');
@@ -360,6 +341,7 @@ router.post('/validarLoginCliente', async (req, res) => {
         } else {
             console.log("Entró, respuesta:" + data)
             res.cookie('usuario', [req.body.u, "C"]);
+            res.clearCookie('loggedin')
             res.redirect("/home")
         }
     })
@@ -419,8 +401,10 @@ router.get('/carritoCompras', async (req,res) =>{
         lista.forEach(i => {
             precioTotal = precioTotal + i.Precio
         });
+        console.log(precioTotal)
         res.render('carrito/carritoCompras', { datos: req.cookies.productosCarrito, usuario: req.cookies.usuario, precioTotal: precioTotal });
     } else {
+        console.log("Entro al sino")
         res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario, precioTotal: false });
     }
 })
@@ -428,6 +412,37 @@ router.get('/carritoCompras', async (req,res) =>{
 router.get('/borrarCarritoCompras', async (req,res) =>{
     res.clearCookie('productosCarrito')
     res.redirect('/tienda')
+})
+
+router.get('/eliminarProductoCarritoCompras/:id', async (req,res) =>{
+    let productos = req.cookies.productosCarrito;
+    let contador = -1;
+    let confirmar;
+    let nuevaListaProductos = []
+    productos.forEach(i =>{
+        contador = contador + 1
+        if(i._id != req.params.id ){
+            nuevaListaProductos.push(productos[contador])
+        }else if (confirmar){
+            console.log("Lo encontro")
+            confirmar = false
+        }else{
+            nuevaListaProductos.push(productos[contador])
+        }
+        res.cookie('productosCarrito', nuevaListaProductos);
+        console.log(req.cookies)
+        //No he podido con el eliminar elemento del carrito
+        
+    })
+    res.redirect('/carritoCompras')
+    
+    // Productos.findOne({_id:req.params.id},(err,data)=>{
+    //     if(data){
+    //         console.log(productos[0])
+    //         res.redirect('/carritoCompras')
+    //     }
+    // })
+    
 })
 
 // router.get('/suma/:id/:bb', async (req,res) =>{
@@ -445,6 +460,166 @@ router.get('/tienda', async (req,res) =>{
     }
 })
 
+//Compras
+router.get('/comprar', async (req,res) =>{
+    if (req.cookies.usuario) {
+        res.render('compras/confirmacionCompra', { usuario: req.cookies.usuario });
+    } else {
+        res.render('compras/confirmacionCompra', { usuario: false });
+    }
+})
+
+router.post('/registrarVenta', (req,res) =>{
+    if (req.cookies.usuario) {
+        fechaActual = fecha();
+        const data = req.cookies.productosCarrito;
+        let precioTotal = 0;
+        let stockViejo = 0;
+        let estadoHabilitado = true;
+        //lista de los nombres
+        let lista = [];
+        //lista de los ids 
+        let listaId = []  
+        data.forEach(i => {
+            listaId.push(i._id)
+            lista.push(i.Nombre)
+            precioTotal = precioTotal + i.Precio
+        });
+
+        //Guardamos el numero de ventas del vendedor
+        Vendedor.findOne({ usuarioVendedor: req.body.vendedor}, (err, data) => {
+            if (err) {
+                console.log("Hubo un error encontrando el vendedor: ", err)
+            } else if (data == null) {
+                console.log("no hay vendedor con el usuario: " + data)
+                res.redirect('comprar')
+                //------------------------Hacer alerta//----------------------
+            }else {
+                var ventasDespachadasNuevo = data.ventasDespachadas + 1
+                
+                Vendedor.updateOne({usuarioVendedor: req.body.vendedor }, {
+                    //Deberiamos de editar segun su estado Habilitado
+                    $set: {
+                        "ventasDespachadas": ventasDespachadasNuevo
+                    }
+                    
+                }, (err, info) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log("Edito bien al vendedor")
+                    }
+                })
+                
+            }
+        })
+
+        //Agregamos la nueva venta
+        const nuevaVenta = new Venta({
+                "productosVenta": lista,
+                "subTotal": precioTotal,
+                "totalVenta": precioTotal+req.body.impuestoVenta,
+                "fechaVenta": fechaActual,
+                "impuestoVenta": req.body.impuestoVenta,
+                "cliente": req.cookies.usuario[0],
+                "Vendedor": req.body.vendedor
+            }
+        )
+        nuevaVenta.save()
+        console.log("Se guardó el venta")
 
 
+        //Ubicamos el cliente al que vamos a editar
+        Cliente.findOne({ usuarioCliente: req.cookies.usuario[0]}, (err, data) => {
+            if (err) {
+                console.log("Hubo un error encontrando el Cliente: ", err)
+            } else if (data == null) {
+                console.log("no hay datos: " + data)
+            }else {
+                var cliente = data.historialCompras;
+                lista.forEach(i =>{
+                    cliente.push(i)
+                })
+                totalCompradoNuevo = data.totalComprado + precioTotal
+                
+                Cliente.updateOne({usuarioCliente: req.cookies.usuario[0] }, {
+                    //Deberiamos de editar segun su estado Habilitado
+                    $set: {
+                        "historialCompras": cliente,
+                        "totalComprado": totalCompradoNuevo
+                    }
+                    
+                }, (err, info) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log("Edito bien al cliente")
+                    }
+                })
+                
+            }
+        })
+
+        
+
+
+        //Ahora elimanamos uno al stock de cada producto
+        listaId.forEach(i =>{
+            Producto.findOne({_id:i}, (err, data) =>{
+                if (err) {
+                    console.log("Hubo un error encontrando el Producto que se le va a editar el stock: ", err)
+                } else if (data == null) {
+                    console.log("No edito, ya que no encontro el producto: " + data)
+                    res.redirect("/carritoCompras")
+                }else {
+                    stockViejo = data.Stock
+                    console.log(stockViejo)
+                    stockViejo = stockViejo -1;
+                    if(stockViejo <= 1){
+                        estadoHabilitado = false;
+                    }else{
+                        estadoHabilitado = true;
+                    }
+                    console.log(stockViejo)
+                    //primero Editamos la cantidad de stock, restamos uno
+                    Producto.updateOne({ _id: i }, {
+                        //Deberiamos de editar segun su estado Habilitado
+                        $set: {
+                            "Stock": stockViejo,
+                            "Habilitado": estadoHabilitado
+                        }
+                           
+                    }, (err, info) => {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            console.log("Edito bien el stock del producto")
+                        }
+                    })
+                    
+                }
+                
+            });
+            
+            
+        })
+        res.clearCookie('productosCarrito')
+        res.redirect('listarProductos')
+            
+    }else {
+        res.redirect('home'); //de alguna manera no esta logueado...
+    }
+})
+
+
+router.get('/listarVentas', async (req,res) => {
+    const data = await Venta.find()
+
+    if (req.cookies.usuario) {
+        res.render('ventas/listarVentas', { datos: data, usuario: req.cookies.usuario });
+    } else {
+        res.render('ventas/listarVentas', { datos: data, usuario: false });
+
+    }
+})
 module.exports = router;

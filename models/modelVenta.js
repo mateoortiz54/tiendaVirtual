@@ -11,10 +11,15 @@ const schemaVenta = new mongoose.Schema({
         required: true,
         default: 0,
     },
-    fechaVenta:[{
+    totalVenta:{
+        type: Number,
+        required: true,
+        default: 0
+    },
+    fechaVenta:{
         type: String,
         required: true, 
-    }],
+    },
     impuestoVenta:{
         type: Number,
         required: true,
@@ -24,7 +29,7 @@ const schemaVenta = new mongoose.Schema({
         required: true, 
     },
     Vendedor:{
-        type: Number, //documento del vendedor 
+        type: String, //usuario del vendedor 
         required: true,
     },
 
