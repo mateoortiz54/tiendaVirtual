@@ -228,10 +228,10 @@ router.post('/guardarContraCliente/:id', (req, res) => {
         }
     }, (err, data) => {
         if (err) {
-            console.log('no dio--------------------asdassdaasdasds' + err)
+            console.log('error' + err)
             res.redirect('/contrasenaClientes')
         } else {
-            console.log('dio--------------------'+data)
+            console.log('success'+data)
             res.redirect('/home')
         }
     })
@@ -255,15 +255,6 @@ router.get('/perfil', async (req, res) => {
         res.render('clientes/perfil', {usuario: false });
     }
 });
-
- 
-
-
-
-
-
-
-
 
 
 //Vendedor
@@ -401,7 +392,7 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
             console.log("Hubo un error encontrando el producto: ", err)
         } else if(data == null){
             console.log("No se encontro el producto con id: ", req.params.id)
-            res.redirect('/listarProductos')
+            res.redirect('/tienda')
             
         }else{
             if (req.cookies.productosCarrito){
@@ -415,7 +406,7 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
                 res.cookie('productosCarrito', productosNuevoCarrito);
             }
         }
-        res.redirect('/listarProductos')
+        res.redirect('/tienda')
     })
 })
 
@@ -430,10 +421,24 @@ router.get('/carritoCompras', async (req,res) =>{
 
 router.get('/borrarCarritoCompras', async (req,res) =>{
     res.clearCookie('productosCarrito')
-    res.redirect('/listarProductos')
+    res.redirect('/tienda')
 })
 
 // router.get('/suma/:id/:bb', async (req,res) =>{
 //     console.log("La suma es: ", suma(req.params.id, req.params.bb))
 // })
+
+//Tienda
+
+router.get('/tienda', async (req,res) =>{
+    const data = await Producto.find()
+    if (req.cookies.usuario) {
+        res.render('tienda/tienda', { datos: data, usuario: req.cookies.usuario });
+    } else {
+        res.render('tienda/tienda', { datos: data, usuario: false });
+    }
+})
+
+
+
 module.exports = router;
