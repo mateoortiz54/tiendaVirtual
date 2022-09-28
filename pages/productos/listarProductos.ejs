@@ -13,11 +13,7 @@
                 </a>
                 
             </div><br>
-            <% if(usuario){ %>
-                <h1><%= usuario[1] %></h1>
-              <% } else{ %>  
-                <h1>No hay usuario</h1>
-             <% } %>
+            
             <table class="striped " >
                 <thead>
                     <tr>
@@ -44,7 +40,6 @@
                                 
                                 <a class="waves-effect waves-light btn-small" href="/editarProducto/<%= e._id %>">editar</a>
                                 <a class="waves-effect waves-light btn-small" href="/eliminarProducto/<%= e._id %>">Eliminar</a>
-                                <a class="waves-effect waves-light btn-small" href="/agregarProductoCarrito/<%= e._id %>"><i class="material-icons">add_shopping_cart</i></a>
                             </td>
                         </tr>
                     <% }) %>
