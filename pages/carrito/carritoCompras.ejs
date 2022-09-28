@@ -48,12 +48,16 @@
                                 <td> <%= e.imagen %> </td>
                                 <td> 
                                     <a class="waves-effect waves-light btn-small" href="/eliminarProducto/<%= e._id %>">Eliminar</a>
+                                    <!--<button class="waves-effect waves-light btn-small" onclick="alertica()" name="action">Alertica</button>-->
                                 </td>
                             </tr>
                         <% }) %>
                     </tbody>
+
     
                 </table>
+                
+
             <% } else{ %>  
                 <section class="container mx-auto text-center py-6 mb-12">
                     <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-white">

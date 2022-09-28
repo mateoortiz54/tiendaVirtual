@@ -7,6 +7,7 @@ const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
+//const suma = require('../public/js/funciones.js')
 //let alert=require('alert');
 
 //instanciamos el cookie parser
@@ -432,4 +433,7 @@ router.get('/borrarCarritoCompras', async (req,res) =>{
     res.redirect('/listarProductos')
 })
 
+// router.get('/suma/:id/:bb', async (req,res) =>{
+//     console.log("La suma es: ", suma(req.params.id, req.params.bb))
+// })
 module.exports = router;
