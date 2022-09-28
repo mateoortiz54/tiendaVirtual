@@ -36,6 +36,7 @@ router.get('/listarProductos', async (req, res) => {
         res.render('productos/listarProductos', { datos: data, usuario: false });
 
     }
+    console.log(fecha())
 
 });
 
@@ -336,7 +337,7 @@ router.post('/validarLoginCliente', async (req, res) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
         } else if (data == null) {
-            console.log("No logueo, ya que no encontro el usuario respuesta: " + data)
+            console.log("No logueo, ya que no encontro el usuario, respuesta: " + data)
             res.redirect("/home")
         } else {
             console.log("Entró, respuesta:" + data)
@@ -368,7 +369,8 @@ router.post('/validarLoginVendedor', async (req, res) => {
 
 
 
-//Carrito
+//Carrito------------------------------------------------------
+
 router.get('/agregarProductoCarrito/:id', async (req,res) =>{
     Producto.findOne({_id: req.params.id }, (err, data) => {
         if (err) {
@@ -393,7 +395,7 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
     })
 })
 
-//aun no hecho pagina carrito
+
 router.get('/carritoCompras', async (req,res) =>{
     if (req.cookies.productosCarrito) {
         var precioTotal = 0;
@@ -418,30 +420,24 @@ router.get('/eliminarProductoCarritoCompras/:id', async (req,res) =>{
     let productos = req.cookies.productosCarrito;
     let contador = -1;
     let confirmar;
-    let nuevaListaProductos = []
-    productos.forEach(i =>{
-        contador = contador + 1
-        if(i._id != req.params.id ){
-            nuevaListaProductos.push(productos[contador])
-        }else if (confirmar){
-            console.log("Lo encontro")
-            confirmar = false
-        }else{
-            nuevaListaProductos.push(productos[contador])
+    var nuevaListaProductos = []
+    console.log("tamaño cookie "+productos.length)
+    console.log(req.params.id)
+    console.log(productos[0]._id)
+    for(let i=0;i<productos.length;i++){
+        if(productos[i]._id ===req.params.id){
+            productos.splice(i,1);
+            if(productos.length == 0){
+                res.clearCookie('productosCarrito')
+            }else{
+                res.cookie('productosCarrito', productos);
+            }
+            console.log(req.cookies)
+            
         }
-        res.cookie('productosCarrito', nuevaListaProductos);
-        console.log(req.cookies)
-        //No he podido con el eliminar elemento del carrito
-        
-    })
+       
+    }
     res.redirect('/carritoCompras')
-    
-    // Productos.findOne({_id:req.params.id},(err,data)=>{
-    //     if(data){
-    //         console.log(productos[0])
-    //         res.redirect('/carritoCompras')
-    //     }
-    // })
     
 })
 
@@ -518,7 +514,7 @@ router.post('/registrarVenta', (req,res) =>{
         const nuevaVenta = new Venta({
                 "productosVenta": lista,
                 "subTotal": precioTotal,
-                "totalVenta": precioTotal+req.body.impuestoVenta,
+                "totalVenta": precioTotal+ parseInt(req.body.impuestoVenta),
                 "fechaVenta": fechaActual,
                 "impuestoVenta": req.body.impuestoVenta,
                 "cliente": req.cookies.usuario[0],

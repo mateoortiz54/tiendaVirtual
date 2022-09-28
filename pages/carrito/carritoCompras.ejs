@@ -43,9 +43,7 @@
                                 <td> <%= e.Habilitado %> </td>
                                 <td> <%= e.imagen %> </td>
                                 <td> 
-                                    <a class="waves-effect waves-light btn-small" href="/eliminarProductoCarritoCompras/<%= e._id %>">Eliminar</a>
-                                    <a class="waves-effect waves-light btn-small" onclick="eliminar('/eliminarProductoCarritio/<%= e._id %>')" >Eliminar</a>
-                                    <!--<button class="waves-effect waves-light btn-small" onclick="alertica()" name="action">Alertica</button>-->
+                                    <a class="waves-effect waves-light btn-small" onclick="eliminar('/eliminarProductoCarritoCompras/<%= e._id %>')" >Eliminar</a>
                                 </td>
                             </tr>
                         <% }) %>
