@@ -48,12 +48,31 @@
                                 <td> <%= e.imagen %> </td>
                                 <td> 
                                     <a class="waves-effect waves-light btn-small" href="/eliminarProducto/<%= e._id %>">Eliminar</a>
+                                    <!--<button class="waves-effect waves-light btn-small" onclick="alertica()" name="action">Alertica</button>-->
                                 </td>
                             </tr>
                         <% }) %>
                     </tbody>
-    
+                    <% if(precioTotal){ %>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>
+                                    Total:
+                                </th>
+                                <th>
+                                    $ <%= precioTotal %> 
+                                </th>
+                                <th><a class="waves-effect waves-dark btn-small" href="/comprar">Comprar</a></th>
+                            </tr>
+                        </tfoot>
+                    <% } %>
                 </table>
+                
+
             <% } else{ %>  
                 <section class="container mx-auto text-center py-6 mb-12">
                     <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-white">

@@ -7,6 +7,7 @@ const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
+//const suma = require('../public/js/funciones.js')
 //let alert=require('alert');
 
 //instanciamos el cookie parser
@@ -66,6 +67,7 @@ router.post('/registerProducto', (req, res) => {
         "Precio": req.body.Precio,
         "Stock": req.body.Stock,
         "Imagen": req.body.imagen,
+        "vendedorProducto": req.cookies.usuario[0],
         "Habilitado": true
     }
     )
@@ -412,9 +414,14 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
 //aun no hecho pagina carrito
 router.get('/carritoCompras', async (req,res) =>{
     if (req.cookies.productosCarrito) {
-        res.render('carrito/carritoCompras', { datos: req.cookies.productosCarrito, usuario: req.cookies.usuario });
+        var precioTotal = 0;
+        const lista = req.cookies.productosCarrito;
+        lista.forEach(i => {
+            precioTotal = precioTotal + i.Precio
+        });
+        res.render('carrito/carritoCompras', { datos: req.cookies.productosCarrito, usuario: req.cookies.usuario, precioTotal: precioTotal });
     } else {
-        res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario });
+        res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario, precioTotal: false });
     }
 })
 
@@ -423,6 +430,9 @@ router.get('/borrarCarritoCompras', async (req,res) =>{
     res.redirect('/tienda')
 })
 
+// router.get('/suma/:id/:bb', async (req,res) =>{
+//     console.log("La suma es: ", suma(req.params.id, req.params.bb))
+// })
 
 //Tienda
 

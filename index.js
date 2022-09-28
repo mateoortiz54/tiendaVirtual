@@ -17,10 +17,6 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use('/', enrutador);
 app.use(cookieParser());
+//app.use('/static', express.static(__dirname, 'public/'))
 
-
-app.get("/send", (req, res) => {
-    res.cookie("loggedin", "true");
-    res.send("Cookie sent!");
-});
 
