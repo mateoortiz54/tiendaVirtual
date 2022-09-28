@@ -14,7 +14,8 @@
                 <div style="display: flex; justify-content: space-around;">
                     <a
                     class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                    href="/borrarCarritoCompras">
+                    onclick="eliminar('/borrarCarritoCompras')"
+                    >
                     Borrar Carrito
                     </a>
                     
@@ -43,6 +44,7 @@
                                 <td> <%= e.imagen %> </td>
                                 <td> 
                                     <a class="waves-effect waves-light btn-small" href="/eliminarProductoCarritoCompras/<%= e._id %>">Eliminar</a>
+                                    <a class="waves-effect waves-light btn-small" onclick="eliminar('/eliminarProductoCarritio/<%= e._id %>')" >Eliminar</a>
                                     <!--<button class="waves-effect waves-light btn-small" onclick="alertica()" name="action">Alertica</button>-->
                                 </td>
                             </tr>
@@ -81,7 +83,7 @@
                     </h3>
                     <a
                         class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                        href="/listarProductos">
+                        href="/tienda">
                         Vamos a Comprar
                     </a>
                 </section>

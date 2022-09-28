@@ -13,6 +13,7 @@ app.set('views', path.join(__dirname, 'pages/'));
 app.listen(conex= process.env.PORT || 9000, () => {
     console.log("iniciando en el puerto: ", conex)
 })
+app.use(express.static('public'));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use('/', enrutador);

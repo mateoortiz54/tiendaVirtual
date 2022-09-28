@@ -37,11 +37,13 @@
                                         <div
                                             class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
                                             <div class="flex items-center justify-end">
-                                                <a class="waves-effect waves-light btn-small"  href="/agregarProductoCarrito/<%= e._id %>"><i class="material-icons">add_shopping_cart</i></a>
+                                                <a class="waves-effect waves-light btn-small" <% if(usuario[1] == "C"){ %>onclick="validar('/agregarProductoCarrito/<%= e._id %>')" <% } else{ %> onclick="alert('Debes ser Cliente para comprar')" <% } %>><i class="material-icons">add_shopping_cart</i></a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div >
                                     <% }) %>
+
+
 
                             </div>
                         </section>
