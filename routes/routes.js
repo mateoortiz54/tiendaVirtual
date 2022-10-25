@@ -1,7 +1,7 @@
 const conexion = require("../database/connectionmongoose");
 const cookieParser = require('cookie-parser')
 const express = require('express');
-const app = express();
+//const app = express();
 const router = express.Router();
 const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
@@ -14,7 +14,7 @@ const Productos = require("../models/modelProducto.js");
 //instanciamos el cookie parser
 router.use(cookieParser())
 
-//home-index
+//home-index provee la pagina principal
 router.get('/home', async (req, res) => {
     const data = await Producto.find().limit(3)
     if (req.cookies.usuario) {
@@ -26,7 +26,8 @@ router.get('/home', async (req, res) => {
 
 });
 
-//Producto
+//Producto 
+//obtiene y guarda la lista de los productos, y renderiza con ellos
 router.get('/listarProductos', async (req, res) => {
     const data = await Producto.find()
 
@@ -40,6 +41,7 @@ router.get('/listarProductos', async (req, res) => {
 
 });
 
+//obtiene y elimina un producto de la lista de productos de la base de datos
 router.get('/eliminarProducto/:id', async (req, res) => {
     const id = req.params.id
     Producto.deleteOne({ _id: id }, (err, info) => {
@@ -53,6 +55,7 @@ router.get('/eliminarProducto/:id', async (req, res) => {
 
 });
 
+//renderiza la pagina de registro de producto, en la cual se podrá registrar un producto
 router.get('/registrarProducto', async (req, res) => {
     if (req.cookies.usuario) {
         res.render('productos/registroProducto', { usuario: req.cookies.usuario });
@@ -62,6 +65,7 @@ router.get('/registrarProducto', async (req, res) => {
 });
 
 
+// obtiene el registro de un producto y lo guarda en la base de datos
 router.post('/registerProducto', (req, res) => {
     const nuevoProducto = new Producto({
         "Referencia": req.body.Referencia,
@@ -78,6 +82,7 @@ router.post('/registerProducto', (req, res) => {
     res.redirect("/listarProductos")
 })
 
+//obtiene el producto que se pide para mandarlo al template para su posterior actualización
 router.get('/editarProducto/:id', (req, res) => {
     Producto.findOne({ _id: req.params.id }, (err, data) => {
         if (err) {
@@ -96,6 +101,7 @@ router.get('/editarProducto/:id', (req, res) => {
     })
 })
 
+//obtiene los datos recibidos sobre el producto actualizado y los guarda en la base de dato. Si hay algún error, se maneja
 router.post('/guardarActualizarProducto/:id', (req, res) => {
     Producto.updateOne({ _id: req.params.id }, {
         $set: {
@@ -119,16 +125,22 @@ router.post('/guardarActualizarProducto/:id', (req, res) => {
 
 
 
-//cliente
+//cliente --------------------------------------------------------
+
+//Renderiza el template para el registro de un nuevo cliente
+//tambien se verifica si hay un usuario logueado
 router.get('/registrarCliente', async (req, res) => {
     if (req.cookies.usuario) {
         res.render('clientes/registroCliente', { usuario: req.cookies.usuario });
     } else {
+        //Esto hay que cambiarlo ya que si no está logueado no deberia de enviarlo allá, sino al index
         res.render('clientes/registroCliente', { usuario: false });
 
     }
 
 });
+
+//obtiene los datos post del template registrar cliente, y los guarda en la base de datos
 router.post('/registerCliente', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
     const nuevoCliente = new Cliente({
@@ -147,6 +159,7 @@ router.post('/registerCliente', (req, res) => {
     res.redirect("home");
 });
 
+//obtiene la lista de clientes y los renderiza 
 router.get('/listarClientes', async (req, res) => {
 
     const data = await Cliente.find()
@@ -158,6 +171,7 @@ router.get('/listarClientes', async (req, res) => {
     }
 });
 
+//obtiene un id y ubica 
 router.get('/eliminarCliente/:id', async (req, res) => {
     const id = req.params.id
     Cliente.deleteOne({ _id: id }, (err, info) => {
