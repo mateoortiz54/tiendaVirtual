@@ -202,7 +202,7 @@ router.get('/eliminarCliente/:id', async (req, res) => {
 router.get('/editarCliente/:usuario', (req, res) => {
     //verificaaaarrrrrrrrrrrrrrrr
     const usuario = req.params.usuario;
-    Cliente.findOne({ usuarioCliente: usuario }, (err, data) => {
+    Cliente.findOne({ usuarioCliente: usuario[0] }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
         } else if(data == null){
@@ -280,11 +280,12 @@ router.get('/perfil', async (req, res) => {
                     console.log("Hubo un error encontrando el Cliente: ", err)
                 } else if (data == null) {
                     console.log("no hay datos: " + data)
+                    res.redirect("/home")
                 }else {
                     //Aqui va el codigo a correr
                     console.log(req.cookies.usuario[1])
                     console.log("Entró, respuesta:" + data)
-                    res.render('clientes/perfil', {usuario: req.cookies.usuario, datos: data });
+                    res.render('perfil', {usuario: req.cookies.usuario, datos: data });
                 }
             })
         } else if(req.cookies.usuario[1] == "V"){
@@ -296,26 +297,16 @@ router.get('/perfil', async (req, res) => {
                 }else {
                     //Aqui va el codigo a correr
                     console.log("Entró, respuesta:" + data)
-                    res.render('clientes/perfil', {usuario: req.cookies.usuario, datos: data });
+                    res.render('perfil', {usuario: req.cookies.usuario, datos: data });
                 }
             })
         }else{
-            res.render('clientes/perfil', {usuario: false });
+            console.log("No se encontro al usuario")
+            res.redirect('/home')
         }
-        Usuario.findOne({ usuarioCliente: req.cookies.usuario}, (err, data) => {
-            if (err) {
-                console.log("Hubo un error encontrando el Cliente: ", err)
-            } else if (data == null) {
-                console.log("no hay datos: " + data)
-            }else {
-                //Aqui va el codigo a correr
-                console.log("Entró, respuesta:" + data)
-                res.render('clientes/perfil', {usuario: req.cookies.usuario, datos: data });
-            }
-        })
-       
     } else {
-        res.render('clientes/perfil', {usuario: false });
+        console.log("No hay usuario logueado")
+        res.redirect('/home')
     }
 });
 
@@ -330,20 +321,22 @@ router.get('/registrarVendedor', async (req, res) => {
 });
 
 router.post('/registerVendedor', (req, res) => {
-    ubicacion = [req.body.ubiLat, req.body.ubiLong];
+    const nuevoUsuario = new Usuario({
+        "usuario" : req.body.usuario,
+        "palabraClave": req.body.p,
+        "contrasena": req.body.contrasena
+    })
     const nuevoVendedor = new Vendedor({
         "nombreVendedor": req.body.nombre,
         "documento": req.body.documento,
         "ventasDespachadas": 0,
-        "usuarioVendedor": req.body.usuario,
-        "palabraClave": req.body.p,
-        "contrasenaVendedor": req.body.contrasena
     }
-    )
-    nuevoVendedor.save()
+    );
+    nuevoUsuario.save();
+    nuevoVendedor.save();
     console.log("Se guardó el vendedor")
     res.redirect("/home")
-})
+});
 
 router.get('/contrasenaVendedor', async (req, res) => {
 
@@ -398,11 +391,7 @@ router.post('/validarLoginCliente', async (req, res) => {
     Usuario.findOne({ usuario: req.body.u, contrasena: req.body.p }, (err, data) => {
         if (!err) {
             console.log("Entró, respuesta:" + data)
-            res.cookie('usuario', [req.body.u, data.rol])
-            
-            console.log('------------------------------')
-            console.log(req.cookies)
-            
+            res.cookie('usuario', [data.usuario, data.rol])
             res.redirect("/home")
             
         } else if (data == null) {
@@ -413,27 +402,6 @@ router.post('/validarLoginCliente', async (req, res) => {
         }
     })
 })
-
-// router.get('/LoginVendedor', async (req, res) => {
-//     res.render('login/loginVendedor');
-// });
-
-router.post('/validarLoginVendedor', async (req, res) => {
-    Vendedor.findOne({ usuarioVendedor: req.body.u, contrasenaVendedor: req.body.p }, (err, data) => {
-        if (err) {
-            console.log("Hubo un error encontrando el vendedor: ", err)
-        } else if (data == null) {
-            console.log("No logueo, ya que no encontro el usuario, respuesta: "+data)
-            res.redirect("/home")
-        }else{
-            console.log("Entró, respuesta:"+data)
-            res.cookie('usuario', [req.body.u, "V"]);
-            res.redirect("/home")
-        }
-    })
-})
-
-
 
 //Carrito------------------------------------------------------
 
@@ -484,9 +452,6 @@ router.get('/borrarCarritoCompras', async (req,res) =>{
 
 router.get('/eliminarProductoCarritoCompras/:id', async (req,res) =>{
     let productos = req.cookies.productosCarrito;
-    let contador = -1;
-    let confirmar;
-    var nuevaListaProductos = []
     console.log("tamaño cookie "+productos.length)
     console.log(req.params.id)
     console.log(productos[0]._id)
@@ -506,12 +471,6 @@ router.get('/eliminarProductoCarritoCompras/:id', async (req,res) =>{
     res.redirect('/carritoCompras')
     
 })
-
-// router.get('/suma/:id/:bb', async (req,res) =>{
-//     console.log("La suma es: ", suma(req.params.id, req.params.bb))
-// })
-
-//Tienda
 
 router.get('/tienda', async (req,res) =>{
     const data = await Producto.find()
