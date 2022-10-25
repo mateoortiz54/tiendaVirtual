@@ -1,14 +1,17 @@
 const conexion = require("../database/connectionmongoose");
 const cookieParser = require('cookie-parser')
 const express = require('express');
+const nodemailer = require('nodemailer');
 //const app = express();
 const router = express.Router();
 const Producto = require('../models/modelProducto.js');
 const Cliente = require('../models/modelCliente.js');
+const Usuario = require('../models/modelUsuario.js');
 const Vendedor = require('../models/modelVendedor.js');
 const Venta = require('../models/modelVenta.js');
 const fecha = require('../public/js/fecha.js');
 const Productos = require("../models/modelProducto.js");
+const Usuarios = require("../models/modelUsuario");
 //let alert=require('alert');
 
 //instanciamos el cookie parser
@@ -143,17 +146,21 @@ router.get('/registrarCliente', async (req, res) => {
 //obtiene los datos post del template registrar cliente, y los guarda en la base de datos
 router.post('/registerCliente', (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
+    const nuevoUsuario = new Usuario({
+        "usuario" : req.body.usuario,
+        "palabraClave": req.body.p,
+        "contrasena": req.body.contrasena
+    })
     const nuevoCliente = new Cliente({
         "nombreCliente": req.body.nombre,
         "telCliente": req.body.tel,
         "ubicacion": ubicacion,
         "totalComprado": 0,
         "historialCompras": [],
-        "usuarioCliente": req.body.usuario,
-        "palabraClave": req.body.p,
-        "contrasenaCliente": req.body.contrasena
+        "usuarioCliente": req.body.usuario
     }
     )
+    nuevoUsuario.save();
     nuevoCliente.save();
     console.log("Se guardó el Cliente");
     res.redirect("home");
@@ -173,10 +180,18 @@ router.get('/listarClientes', async (req, res) => {
 
 //obtiene un id y ubica 
 router.get('/eliminarCliente/:id', async (req, res) => {
-    const id = req.params.id
-    Cliente.deleteOne({ _id: id }, (err, info) => {
+    const usuario = req.params.usuarioCliente
+    Usuario.deleteOne({ usuarioCliente: usuario }, (err, info) => {
+        if (err) {
+            console.log("Hubo un error eliminando el usuario: ", err)
+        } else {
+            console.log("Se borró");
+        }
+    })
+    Cliente.deleteOne({ usuarioCliente: usuario }, (err, info) => {
         if (err) {
             console.log("Hubo un error eliminando el cliente: ", err)
+            res.redirect('/listarClientes');
         } else {
             console.log("Se borró");
             res.redirect('/listarClientes');
@@ -184,8 +199,10 @@ router.get('/eliminarCliente/:id', async (req, res) => {
     })
 });
 
-router.get('/editarCliente/:id', (req, res) => {
-    Cliente.findOne({ _id: req.params.id }, (err, data) => {
+router.get('/editarCliente/:usuario', (req, res) => {
+    //verificaaaarrrrrrrrrrrrrrrr
+    const usuario = req.params.usuario;
+    Cliente.findOne({ usuarioCliente: usuario }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
         } else if(data == null){
@@ -202,11 +219,12 @@ router.get('/editarCliente/:id', (req, res) => {
 })
 
 router.post('/guardarActualizarCliente/:id', (req, res) => {
-    Cliente.updateOne({ _id: req.params.id }, {
+    Cliente.updateOne({ usuarioCliente: req.params.usuario }, {
+        //Esto hay que ampliarlo
         $set: {
             "nombreCliente": req.body.nombre,
-            "telCliente": req.body.telCliente,
-            "contrasenaCliente": req.body.contrasena
+            "telCliente": req.body.telCliente
+            //"contrasenaCliente": req.body.contrasena
         }
     }, (err, info) => {
         if (err) {
@@ -253,17 +271,46 @@ router.post('/guardarContraCliente/:id', (req, res) => {
     })
 })
 
-
+//Perfil-----------------------------------------------------------------------
 router.get('/perfil', async (req, res) => {
     if (req.cookies.usuario) {
-        Cliente.findOne({ usuarioCliente: req.cookies.usuario}, (err, data) => {
+        if(req.cookies.usuario[1] == "C"){
+            Cliente.findOne({ usuarioCliente: req.cookies.usuario[0]}, (err, data) => {
+                if (err) {
+                    console.log("Hubo un error encontrando el Cliente: ", err)
+                } else if (data == null) {
+                    console.log("no hay datos: " + data)
+                }else {
+                    //Aqui va el codigo a correr
+                    console.log(req.cookies.usuario[1])
+                    console.log("Entró, respuesta:" + data)
+                    res.render('clientes/perfil', {usuario: req.cookies.usuario, datos: data });
+                }
+            })
+        } else if(req.cookies.usuario[1] == "V"){
+            Vendedor.findOne({ usuarioCliente: req.cookies.usuario}, (err, data) => {
+                if (err) {
+                    console.log("Hubo un error encontrando el Cliente: ", err)
+                } else if (data == null) {
+                    console.log("no hay datos: " + data)
+                }else {
+                    //Aqui va el codigo a correr
+                    console.log("Entró, respuesta:" + data)
+                    res.render('clientes/perfil', {usuario: req.cookies.usuario, datos: data });
+                }
+            })
+        }else{
+            res.render('clientes/perfil', {usuario: false });
+        }
+        Usuario.findOne({ usuarioCliente: req.cookies.usuario}, (err, data) => {
             if (err) {
                 console.log("Hubo un error encontrando el Cliente: ", err)
             } else if (data == null) {
                 console.log("no hay datos: " + data)
             }else {
+                //Aqui va el codigo a correr
                 console.log("Entró, respuesta:" + data)
-                res.render('clientes/perfil', {usuario: req.cookies.usuario,datos: data });
+                res.render('clientes/perfil', {usuario: req.cookies.usuario, datos: data });
             }
         })
        
@@ -342,29 +389,34 @@ router.get('/Login', async (req, res) => {
 });
 
 router.get('/LogOut', async (req, res) => {
+    console.log(req.cookies)
     res.clearCookie('usuario');
     res.redirect('home');
 });
 
 router.post('/validarLoginCliente', async (req, res) => {
-    Cliente.findOne({ usuarioCliente: req.body.u, contrasenaCliente: req.body.p }, (err, data) => {
-        if (err) {
-            console.log("Hubo un error encontrando el Cliente: ", err)
+    Usuario.findOne({ usuario: req.body.u, contrasena: req.body.p }, (err, data) => {
+        if (!err) {
+            console.log("Entró, respuesta:" + data)
+            res.cookie('usuario', [req.body.u, data.rol])
+            
+            console.log('------------------------------')
+            console.log(req.cookies)
+            
+            res.redirect("/home")
+            
         } else if (data == null) {
             console.log("No logueo, ya que no encontro el usuario, respuesta: " + data)
             res.redirect("/home")
         } else {
-            console.log("Entró, respuesta:" + data)
-            res.cookie('usuario', [req.body.u, "C"]);
-            res.clearCookie('loggedin')
-            res.redirect("/home")
+            console.log("Hubo un error encontrando el Usuario: ", err)
         }
     })
 })
 
-router.get('/LoginVendedor', async (req, res) => {
-    res.render('login/loginVendedor');
-});
+// router.get('/LoginVendedor', async (req, res) => {
+//     res.render('login/loginVendedor');
+// });
 
 router.post('/validarLoginVendedor', async (req, res) => {
     Vendedor.findOne({ usuarioVendedor: req.body.u, contrasenaVendedor: req.body.p }, (err, data) => {
@@ -632,4 +684,28 @@ router.get('/listarVentas', async (req,res) => {
 
     }
 })
+
+const sendEmail= function(req, res) {
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth:{
+            user: 'pruebasenasooft@gmail.com',
+            pass: 'mariana1999186'
+        }
+    })
+};
+
+var mailOptions ={
+    from: "Remitente",
+    to:"jcalzate@misena.edu.co",
+    subject: "Asunto",
+    text: "Buenos dias Profe, cuando me va a enviar el ejemplo de la organizacion de la estructura de node? gracias" 
+}
+
+
+router.get('/enviarEmail', sendEmail);
+
 module.exports = router;
+
+
+

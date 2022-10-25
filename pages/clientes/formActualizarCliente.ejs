@@ -13,7 +13,7 @@
                 
                 <form action="/guardarActualizarCliente/<%= datos._id %>" method="post">
 
-                    <input type="number" name="id" value="<%= datos._id %>" hidden>
+                    <input type="number" name="id" value="<%= datos.usuarioCliente %>" hidden>
 
                     <div class="row">
                         <div class="input-field col s6">
@@ -25,12 +25,12 @@
                             <label for="last_name">Telefono </label>
                         </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="input-field col s6">
                             <input value=""  name="contrasena" type="password" class="validate">
                             <label for="contrasena">Password</label>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="row" style="text-align: center;">
                         <button  class="waves-effect waves-light btn-small" type="submit">Enviar</button><br><br>

@@ -18,15 +18,6 @@ const schemaVendedor = new mongoose.Schema({
         type: String,
         required: true,
     },
-    palabraClave:{
-        type: String,
-        default :'vendedor',
-        required: true,
-    },
-    contrasenaVendedor:{
-        type: String,
-        required: true,
-    },
 
 });
 
