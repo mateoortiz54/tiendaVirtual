@@ -1,0 +1,75 @@
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
+    <div   style="margin-top: 8em; margin-left:2em ;  margin-right: 2em;  ; margin-bottom: 2em;" >
+        <section id="Listar Productos"  >
+            <div style="display: flex; justify-content: space-around;">
+                <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-white-800">
+                    Confirmacion Compra
+                </h1>
+            </div>
+            
+                
+                <div class="row">
+                    <form class="col s12" action="/registrarVenta" method="post">
+                        <div class="row">
+                            <div class="col s6">
+                            Digite el impuesto por la venta:
+                            <div class="input-field inline">
+                                <input id="inputImpVen" name="impuestoVenta" type="number" class="validate">
+                                <label for="inputImpVen">impuesto</label>
+                                <span class="helper-text" data-error="wrong" data-success="right">consultelo antes de digitarlo</span>
+                            </div>
+                            </div>
+                            <div class="col s6">
+                                Escriba el usuario del Vendedor que los despachó:
+                                <div class="input-field inline">
+                                    <input id="Vendedor" name="vendedor" type="text" class="validate">
+                                    <label for="Vendedor">Usuario Vendedor</label>
+                                    <span class="helper-text" data-error="wrong" data-success="right">Helper text</span>
+                                </div>
+                            </div>
+                            <input id="fecha" name="fecha" type="datetime-local" hidden>
+                        </div>
+                    <!-- <div class="row">
+                        <div class="input-field col s6">
+                        <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+                        <label for="first_name">First Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                        <input id="last_name" type="text" class="validate">
+                        <label for="last_name">Last Name</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                        <input disabled value="I am not editable" id="disabled" type="text" class="validate">
+                        <label for="disabled">Disabled</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                        <input id="password" type="password" class="validate">
+                        <label for="password">Password</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                        <input id="email" type="email" class="validate">
+                        <label for="email">Email</label>
+                        </div>
+                    </div> -->
+                    <button class="waves-effect waves-dark btn-small" type="submit">Comprar</button>    
+                </form>
+                </div>
+                
+                
+            
+            
+        </section>
+    </div>
+    
+    
+<%- include('../partials/footer'); %>

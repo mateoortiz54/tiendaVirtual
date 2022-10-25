@@ -1,0 +1,39 @@
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
+    <div   style="margin-top: 8em; margin-left:2em ;  margin-right: 2em;" >
+        <section id="Listar Productos"  >
+            <table class="striped  "   >
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>telefono</th>
+                        <th>Ubicacion</th>
+                        <th>Total Comprado</th>
+                        <th>opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <% datos.forEach ( (e) => { %>
+                        <tr>
+                            <td> <%= e.nombreCliente %> </td>
+                            <td> <%= e.telCliente %> </td>
+                            <td> <%= e.ubicacion %> </td>
+                            <td> <%= e.totalComprado %> </td>
+                            <td> 
+                                <a  class="waves-effect waves-light btn-small" href="/editarCliente/<%= e._id %>">editar</a>
+                                <a  class="waves-effect waves-light btn-small" onclick="eliminar('/eliminarCliente/<%= e._id %>')" >Eliminar</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            
+        </section>
+    </div><br><br><br>
+    
+    
+<%- include('../partials/footer'); %>

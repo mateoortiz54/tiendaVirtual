@@ -1,0 +1,67 @@
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
+  
+    
+    <div style="margin-top: 8em; margin-left:2em ;  margin-right: 2em; background-color: rgb(72, 77, 81) ; margin-bottom: 2em;">
+        
+        <section id="Listar Productos">
+
+            
+            <div class="row">
+                
+                <form class="col s12" action="/registerCliente" method="post">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input  name="nombre" id="first_name" type="text" class="validate">
+                            <label for="first_name">Nombre Cliente</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="last_name" name="tel" type="number" class="validate">
+                            <label for="last_name">Telefono</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input   name="ubiLat" type="text" class="validate">
+                            <label for="ubiLat">Latitud</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input    name="ubiLong" type="text" class="validate">
+                            <label for="ubiLong">Longitud</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="email" type="email" name="usuario" class="validate">
+                            <label for="usuario">Email</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="password" type="password" name="contrasena" class="validate">
+                            <label for="contrasena">Password</label>
+                        </div>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="palabra" type="text" name="p" class="validate">
+                        <label for="palabra">Palabra Clave</label>
+                    </div>
+                    <div style="text-align: center; ">
+                        <button  class="waves-effect waves-light btn-small" type="submit">Enviar</button>
+                    </div><br><br>
+                    
+                </form>
+            </div>
+
+        </section>
+    </div>
+
+    <div style="margin: 3em ;  ; text-align: center;">
+        <a  class="waves-effect waves-light btn-small" href="/registrarVendedor">REGISTRO VENDEDOR</a>
+    </div>
+
+
+
+<%- include('../partials/footer'); %>

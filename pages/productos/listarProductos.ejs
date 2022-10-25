@@ -1,0 +1,55 @@
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
+
+    <div   style="margin-top: 4em; margin-left:2em ;  margin-right: 2em;  ; margin-bottom: 4em;" >
+        <section id="Listar Productos"  >
+            <div style="display: flex; justify-content: space-around;">
+                <a
+                class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-4 py-6 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+                href="/registrarProducto">
+                Registrar producto
+                </a>
+                
+            </div><br>
+            
+            <table class="striped  " style="text-align: center;" id="example" >
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Referencia</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th>imagen</th>
+                        <th>opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <% datos.forEach ( (e) => { %>
+                        <tr>
+                            <td> <%= e.Nombre %> </td>
+                            <td> <%= e.Referencia %> </td>
+                            <td> <%= e.Precio %> </td>
+                            <td> <%= e.Stock %> </td>
+                            <td> <%= e.Habilitado %> </td>
+                            <td> <%= e.imagen %> </td>
+                            <td> 
+                                
+                                <a class="waves-effect waves-light btn-small" href="/editarProducto/<%= e._id %>">editar</a>
+                                <a class="waves-effect waves-light btn-small" onclick="eliminar('/eliminarProducto/<%= e._id %>')"  >Eliminar</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+
+            </table>
+            
+        </section>
+    </div>
+    
+    
+<%- include('../partials/footer'); %>

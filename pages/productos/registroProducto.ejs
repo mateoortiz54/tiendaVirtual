@@ -1,0 +1,51 @@
+<% if(usuario){ %>
+    <%- include('../partials/headers', {usuario:usuario})%>  
+  <% } else{ %>  
+    <%- include('../partials/headers', {usuario:false})%>
+ <% } %>
+    
+    <div style="margin-top: 8em; margin-left:2em ;  margin-right: 2em; background-color: rgb(72, 77, 81) ; margin-bottom: 2em;">
+        
+        <section id="Listar Productos" >
+
+            
+            <div class="row" >
+                <form class="col s12" action="/registerProducto" method="post">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input  name="Nombre" id="first_name" type="text" class="validate">
+                            <label for="first_name">Nombre</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="last_name" name="Referencia" type="text" class="validate">
+                            <label for="last_name">Referencia</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input value=""   name="Precio" type="number"  class="validate">
+                            <label for="Precio">Precio</label>
+                        </div>
+                    
+                    
+                        <div class="input-field col s6">
+                            <input  value="I am not editable"  name="Stock" type="number" class="validate">
+                            <label for="Stock">Stock</label>
+                        </div>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="email" type="file" name="imagen" class="validate" hidden>
+                        <label for="imagen"></label>
+                    </div>
+                    <div class="row"  >
+                        <button  class="waves-effect waves-light btn-small" type="submit">Enviar</button><br><br>
+                    </div>
+
+                </form>
+            </div>
+
+
+        </section>
+    </div>
+
+    <%- include('../partials/footer'); %>
