@@ -1,24 +1,24 @@
-const conexion = require("../database/connectionmongoose");
+const conexion = require("../../database/connectionmongoose");
 const cookieParser = require('cookie-parser')
 const express = require('express');
 const nodemailer = require('nodemailer');
 //const app = express();
 const router = express.Router();
-const Producto = require('../models/modelProducto.js');
-const Cliente = require('../models/modelCliente.js');
-const Usuario = require('../models/modelUsuario.js');
-const Vendedor = require('../models/modelVendedor.js');
-const Venta = require('../models/modelVenta.js');
-const fecha = require('../public/js/fecha.js');
-const Productos = require("../models/modelProducto.js");
-const Usuarios = require("../models/modelUsuario");
+const Producto = require('../../models/modelProducto.js');
+const Cliente = require('../../models/modelCliente.js');
+const Usuario = require('../../models/modelUsuario.js');
+const Vendedor = require('../../models/modelVendedor.js');
+const Venta = require('../../models/modelVenta.js');
+const fecha = require('../../public/js/fecha.js');
+const Productos = require("../../models/modelProducto.js");
+const Usuarios = require("../../models/modelUsuario");
 //let alert=require('alert');
 
 //instanciamos el cookie parser
 router.use(cookieParser())
 
-//home-index provee la pagina principal
-router.get('/home', async (req, res) => {
+//index provee la pagina principal
+exports.home = async (req, res) => {
     const data = await Producto.find().limit(3)
     if (req.cookies.usuario) {
         res.render('home', { datos: data, usuario: req.cookies.usuario });
@@ -27,11 +27,11 @@ router.get('/home', async (req, res) => {
 
     }
 
-});
+};
 
 //Producto 
 //obtiene y guarda la lista de los productos, y renderiza con ellos
-router.get('/listarProductos', async (req, res) => {
+exports.listarProductos = async (req, res) => {
     const data = await Producto.find()
 
     if (req.cookies.usuario) {
@@ -42,10 +42,10 @@ router.get('/listarProductos', async (req, res) => {
     }
     console.log(fecha())
 
-});
+};
 
 //obtiene y elimina un producto de la lista de productos de la base de datos
-router.get('/eliminarProducto/:id', async (req, res) => {
+exports.eliminarProducto = async (req, res) => {
     const id = req.params.id
     Producto.deleteOne({ _id: id }, (err, info) => {
         if (err) {
@@ -56,20 +56,20 @@ router.get('/eliminarProducto/:id', async (req, res) => {
         }
     })
 
-});
+};
 
 //renderiza la pagina de registro de producto, en la cual se podrá registrar un producto
-router.get('/registrarProducto', async (req, res) => {
+exports.registrarProducto = async (req, res) => {
     if (req.cookies.usuario) {
         res.render('productos/registroProducto', { usuario: req.cookies.usuario });
     } else {
         res.render('productos/registroProducto', { usuario: false });
     }
-});
+};
 
 
 // obtiene el registro de un producto y lo guarda en la base de datos
-router.post('/registerProducto', (req, res) => {
+exports.registerProducto = (req, res) => {
     const nuevoProducto = new Producto({
         "Referencia": req.body.Referencia,
         "Nombre": req.body.Nombre,
@@ -83,10 +83,10 @@ router.post('/registerProducto', (req, res) => {
     console.log("Se guardó el producto")
 
     res.redirect("/listarProductos")
-})
+}
 
 //obtiene el producto que se pide para mandarlo al template para su posterior actualización
-router.get('/editarProducto/:id', (req, res) => {
+exports.editarProducto = (req, res) => {
     Producto.findOne({ _id: req.params.id }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el producto: ", err)
@@ -102,10 +102,10 @@ router.get('/editarProducto/:id', (req, res) => {
             }
         }
     })
-})
+}
 
 //obtiene los datos recibidos sobre el producto actualizado y los guarda en la base de dato. Si hay algún error, se maneja
-router.post('/guardarActualizarProducto/:id', (req, res) => {
+exports.guardarActualizarProducto = (req, res) => {
     Producto.updateOne({ _id: req.params.id }, {
         $set: {
             "Referencia": req.body.Referencia,
@@ -123,8 +123,7 @@ router.post('/guardarActualizarProducto/:id', (req, res) => {
         }
     })
 
-})
-
+}
 
 
 
@@ -132,7 +131,7 @@ router.post('/guardarActualizarProducto/:id', (req, res) => {
 
 //Renderiza el template para el registro de un nuevo cliente
 //tambien se verifica si hay un usuario logueado
-router.get('/registrarCliente', async (req, res) => {
+exports.registrarCliente = async (req, res) => {
     if (req.cookies.usuario) {
         res.render('clientes/registroCliente', { usuario: req.cookies.usuario });
     } else {
@@ -141,10 +140,10 @@ router.get('/registrarCliente', async (req, res) => {
 
     }
 
-});
+};
 
 //obtiene los datos post del template registrar cliente, y los guarda en la base de datos
-router.post('/registerCliente', (req, res) => {
+exports.registerCliente = (req, res) => {
     ubicacion = [req.body.ubiLat, req.body.ubiLong];
     const nuevoUsuario = new Usuario({
         "usuario" : req.body.usuario,
@@ -163,11 +162,11 @@ router.post('/registerCliente', (req, res) => {
     nuevoUsuario.save();
     nuevoCliente.save();
     console.log("Se guardó el Cliente");
-    res.redirect("home");
-});
+    res.redirect("");
+};
 
 //obtiene la lista de clientes y los renderiza 
-router.get('/listarClientes', async (req, res) => {
+exports.listarClientes = async (req, res) => {
 
     const data = await Cliente.find()
     console.log(data)
@@ -176,10 +175,10 @@ router.get('/listarClientes', async (req, res) => {
     } else {
         res.render('clientes/listarClientes', { datos: data, usuario: false });
     }
-});
+};
 
 //obtiene un id y ubica 
-router.get('/eliminarCliente/:id', async (req, res) => {
+exports.eliminarCliente =async (req, res) => {
     const usuario = req.params.usuarioCliente
     Usuario.deleteOne({ usuarioCliente: usuario }, (err, info) => {
         if (err) {
@@ -197,9 +196,9 @@ router.get('/eliminarCliente/:id', async (req, res) => {
             res.redirect('/listarClientes');
         }
     })
-});
+};
 
-router.get('/editarCliente/:usuario', (req, res) => {
+exports.editarCliente = (req, res) => {
     //verificaaaarrrrrrrrrrrrrrrr
     const usuario = req.params.usuario;
     Cliente.findOne({ usuarioCliente: usuario[0] }, (err, data) => {
@@ -216,9 +215,9 @@ router.get('/editarCliente/:usuario', (req, res) => {
             }
         }
     })
-})
+}
 
-router.post('/guardarActualizarCliente/:id', (req, res) => {
+exports.guardarActualizarCliente = (req, res) => {
     Cliente.updateOne({ usuarioCliente: req.params.usuario }, {
         //Esto hay que ampliarlo
         $set: {
@@ -234,28 +233,28 @@ router.post('/guardarActualizarCliente/:id', (req, res) => {
         }
     })
 
-})
+}
 
-router.get('/contrasenaClientes', async (req, res) => {
+exports.contrasenaClientes =  async (req, res) => {
 
     res.render('clientes/contrasenaClientes');
-});
+};
 
-router.post('/validarContraCliente', async (req, res) => {
+exports.validarContraCliente = async (req, res) => {
     const clie = Cliente.findOne({ usuarioCliente: req.body.u, palabraClave: req.body.p }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Cliente: ", err)
         } else if (data == null) {
             console.log("No logueo, ya que no encontro el usuario respuesta: " + data)
-            res.redirect("/home")
+            res.redirect("/")
         }else {
             console.log("Entró, respuesta:" + data)
             res.render("clientes/reestrablecerCliente", { cliente: data })
         }
     })
-})
+}
 
-router.post('/guardarContraCliente/:id', (req, res) => {
+exports.guardarContraCliente = (req, res) => {
     Cliente.updateOne({ _id: req.params.id }, {
         $set: {
             "contrasenaCliente": req.body.p
@@ -269,10 +268,10 @@ router.post('/guardarContraCliente/:id', (req, res) => {
             res.redirect('/home')
         }
     })
-})
+}
 
 //Perfil-----------------------------------------------------------------------
-router.get('/perfil', async (req, res) => {
+exports.perfil = async (req, res) => {
     if (req.cookies.usuario) {
         if(req.cookies.usuario[1] == "C"){
             Cliente.findOne({ usuarioCliente: req.cookies.usuario[0]}, (err, data) => {
@@ -308,19 +307,19 @@ router.get('/perfil', async (req, res) => {
         console.log("No hay usuario logueado")
         res.redirect('/home')
     }
-});
+};
 
 
 //Vendedor
-router.get('/registrarVendedor', async (req, res) => {
+exports.registrarVendedor= async (req, res) => {
     if (req.cookies.usuario) {
         res.render('vendedor/registroVendedor', { usuario: req.cookies.usuario });
     } else {
         res.render('vendedor/registroVendedor', { usuario: false });
     }
-});
+};
 
-router.post('/registerVendedor', (req, res) => {
+exports.registerVendedor = (req, res) => {
     const nuevoUsuario = new Usuario({
         "usuario" : req.body.usuario,
         "palabraClave": req.body.p,
@@ -335,15 +334,15 @@ router.post('/registerVendedor', (req, res) => {
     nuevoUsuario.save();
     nuevoVendedor.save();
     console.log("Se guardó el vendedor")
-    res.redirect("/home")
-});
+    res.redirect("/")
+};
 
-router.get('/contrasenaVendedor', async (req, res) => {
+exports.contrasenaVendedor= async (req, res) => {
 
     res.render('vendedor/contrasenaVendedor');
-});
+};
 
-router.post('/validarContraVendedor', async (req, res) => {
+exports.validarContraVendedor = async (req, res) => {
     const clie = Vendedor.findOne({ usuarioCliente: req.body.u, palabraClave: req.body.p }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el Vendedor: ", err)
@@ -355,9 +354,9 @@ router.post('/validarContraVendedor', async (req, res) => {
             res.render("vendedor/reestrablecerVendedor", { vendedor: data })
         }
     })
-})
+}
 
-router.post('/guardarContraVendedor/:id', (req, res) => {
+exports.guardarContraVendedor = (req, res) => {
     Vendedor.updateOne({ _id: req.params.id }, {
         $set: {
             "contrasenaVendedor": req.body.p
@@ -368,44 +367,44 @@ router.post('/guardarContraVendedor/:id', (req, res) => {
             res.redirect('/contrasenaVendedor')
         } else {
             console.log('dio--------------------'+data)
-            res.redirect('/home')
+            res.redirect('/')
         }
     })
-})
+}
 
 
 
 
 //Login
-router.get('/Login', async (req, res) => {
+exports.login =  async (req, res) => {
     res.render('login/login');
-});
+};
 
-router.get('/LogOut', async (req, res) => {
+exports.logOut =  async (req, res) => {
     console.log(req.cookies)
     res.clearCookie('usuario');
-    res.redirect('home');
-});
+    res.redirect('/');
+};
 
-router.post('/validarLoginCliente', async (req, res) => {
+exports.validarLoginCliente =  async (req, res) => {
     Usuario.findOne({ usuario: req.body.u, contrasena: req.body.p }, (err, data) => {
-        if (!err) {
+        if (data != err) {
             console.log("Entró, respuesta:" + data)
             res.cookie('usuario', [data.usuario, data.rol])
-            res.redirect("/home")
+            res.redirect("/")
             
         } else if (data == null) {
             console.log("No logueo, ya que no encontro el usuario, respuesta: " + data)
-            res.redirect("/home")
+            res.redirect("/")
         } else {
             console.log("Hubo un error encontrando el Usuario: ", err)
         }
     })
-})
+}
 
 //Carrito------------------------------------------------------
 
-router.get('/agregarProductoCarrito/:id', async (req,res) =>{
+exports.agregarProductoCarrito = async (req,res) =>{
     Producto.findOne({_id: req.params.id }, (err, data) => {
         if (err) {
             console.log("Hubo un error encontrando el producto: ", err)
@@ -427,10 +426,10 @@ router.get('/agregarProductoCarrito/:id', async (req,res) =>{
         }
         res.redirect('/tienda')
     })
-})
+}
 
 
-router.get('/carritoCompras', async (req,res) =>{
+exports.carritoCompras = async (req,res) =>{
     if (req.cookies.productosCarrito) {
         var precioTotal = 0;
         const lista = req.cookies.productosCarrito;
@@ -443,14 +442,14 @@ router.get('/carritoCompras', async (req,res) =>{
         console.log("Entro al sino")
         res.render('carrito/carritoCompras', { datos: false, usuario: req.cookies.usuario, precioTotal: false });
     }
-})
+}
 
-router.get('/borrarCarritoCompras', async (req,res) =>{
+exports.borrarCarritoCompras =  async (req,res) =>{
     res.clearCookie('productosCarrito')
     res.redirect('/tienda')
-})
+}
 
-router.get('/eliminarProductoCarritoCompras/:id', async (req,res) =>{
+exports.eliminarProductoCarritoCompras = async (req,res) =>{
     let productos = req.cookies.productosCarrito;
     console.log("tamaño cookie "+productos.length)
     console.log(req.params.id)
@@ -470,27 +469,27 @@ router.get('/eliminarProductoCarritoCompras/:id', async (req,res) =>{
     }
     res.redirect('/carritoCompras')
     
-})
+}
 
-router.get('/tienda', async (req,res) =>{
+exports.tienda =  async (req,res) =>{
     const data = await Producto.find()
     if (req.cookies.usuario) {
         res.render('tienda/tienda', { datos: data, usuario: req.cookies.usuario });
     } else {
         res.render('tienda/tienda', { datos: data, usuario: false });
     }
-})
+}
 
 //Compras
-router.get('/comprar', async (req,res) =>{
+exports.comprar = async (req,res) =>{
     if (req.cookies.usuario) {
         res.render('compras/confirmacionCompra', { usuario: req.cookies.usuario });
     } else {
         res.render('compras/confirmacionCompra', { usuario: false });
     }
-})
+}
 
-router.post('/registrarVenta', (req,res) =>{
+exports.registrarVenta = (req,res) =>{
     if (req.cookies.usuario) {
         fechaActual = fecha();
         const data = req.cookies.productosCarrito;
@@ -628,12 +627,12 @@ router.post('/registrarVenta', (req,res) =>{
         res.redirect('listarProductos')
             
     }else {
-        res.redirect('home'); //de alguna manera no esta logueado...
+        res.redirect(''); //de alguna manera no esta logueado...
     }
-})
+}
 
 
-router.get('/listarVentas', async (req,res) => {
+exports.listarVentas = async (req,res) => {
     const data = await Venta.find()
 
     if (req.cookies.usuario) {
@@ -642,7 +641,7 @@ router.get('/listarVentas', async (req,res) => {
         res.render('ventas/listarVentas', { datos: data, usuario: false });
 
     }
-})
+}
 
 const sendEmail= function(req, res) {
     var transporter = nodemailer.createTransport({
@@ -662,9 +661,9 @@ var mailOptions ={
 }
 
 
-router.get('/enviarEmail', sendEmail);
+exports.enviarEmail = sendEmail;
 
-module.exports = router;
+
 
 
 

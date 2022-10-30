@@ -2,7 +2,7 @@ const express = require('express');
 var cookieParser = require('cookie-parser')
 const app = express();
 const path = require('path');
-const enrutador = require('./routes/routes');
+const enrutador = require('./server/routes/routes');
 const { default: mongoose } = require('mongoose')
 
 app.set('view engine', 'ejs');
@@ -19,5 +19,5 @@ app.use(express.json());
 app.use('/', enrutador);
 app.use(cookieParser());
 //app.use('/static', express.static(__dirname, 'public/'))
-
+ 
 
